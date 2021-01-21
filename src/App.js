@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import styled from 'styled-components';
 
-function App() {
+import TabArea from './components/layout/tabArea';
+import ImagesContainer from './components/container/ImagesContainer';
+import CanvasContainer from './components/container/CanvasContainer';
+
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  h1 {
+    padding: 5px;
+    background-color: var(--darkest-gray);
+    color: #fff;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-grow: 1;
+  background-color: var(--dark-gray);
+`;
+
+const App = () => {
+  console.log('App');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Main>
+      <h1>PARTICLE MAKER</h1>
+      <Wrapper>
+        <TabArea title="IMAGES">
+          <ImagesContainer />
+        </TabArea>
+        <TabArea title="CANVAS">
+          <CanvasContainer />
+        </TabArea>
+      </Wrapper>
+    </Main>
   );
-}
+};
 
 export default App;
