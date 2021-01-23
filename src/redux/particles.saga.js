@@ -29,7 +29,6 @@ export function* addParticleSaga(action) {
 export function* deleteParticleSaga(action) {
   try {
     const result = yield call(api.deleteParticle, action.payload);
-    console.log('deleteParticleSaga', result);
     yield put({
       type: 'DELETE_PARTICLE_SUCCESS',
       payload: result,

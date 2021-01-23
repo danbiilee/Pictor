@@ -11,11 +11,11 @@ const CanvasBlock = styled.canvas`
   background-color: #fff;
 `;
 
-const Canvas = ({ activeTarget }) => {
+const Canvas = ({ activeTarget, setMyCanvas }) => {
   const { particles, selectedParticles, selectedCrop } = useSelector(
     state => state.particles,
   );
-  console.log('Canvas', activeTarget);
+  //console.log('Canvas', activeTarget);
 
   const wrapperRef = useRef();
   const canvasRef = useRef();
@@ -42,19 +42,35 @@ const Canvas = ({ activeTarget }) => {
       console.log('crop!!!!');
 
       // myCanvas 생성
-      const my = new MyCanvas(canvasRef.current, ctx.current);
+      const cropImgSrc = particles.find(item => item.id === selectedCrop).src;
+      const my = new MyCanvas(
+        wrapperRef.current,
+        canvasRef.current,
+        ctx.current,
+        cropImgSrc,
+      );
+      setMyCanvas(my);
 
-      // 크롭이미지 로드
-      my.drawCropImage(particles.find(item => item.id === selectedCrop).file);
+      // 크롭할 이미지 초기화
+      my.initCropImage();
 
-      //
-      my.canvas.addEventListener('mousedown', function (e) {
-        my.handleMouseDown(e);
-      });
+      const that = my;
+      my.cropImg.onload = function () {
+        that.drawImage(0.7);
+
+        // 그리기 이벤트 감지
+        that.canvas.addEventListener('mousedown', function (e) {
+          that.handleMouseDown(e);
+
+          if (that.isCropped) {
+            console.log('Canvas: crop 됐다!!!!!');
+          }
+        });
+      };
     }
 
     if (!activeTarget || activeTarget === 'clear') {
-      console.log('clear!!!!');
+      //console.log('clear!!!!');
       // clear canvas
       ctx.current.clearRect(
         0,

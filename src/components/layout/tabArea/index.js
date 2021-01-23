@@ -27,7 +27,7 @@ const Area = styled.div`
 `;
 
 const TabArea = ({ title, children }) => {
-  console.log('TabArea');
+  //console.log('TabArea');
   return (
     <Wrapper tabTitle={title}>
       <Tab>{title}</Tab>

@@ -1,9 +1,9 @@
 import Dexie from 'dexie';
 
 // indexedDB Setting
-const db = new Dexie('ParticleMakerDB');
+const db = new Dexie('PictorDB');
 db.version(1).stores({
-  particles: '++id, file',
+  particles: '++id, type, src',
 });
 db.open().catch(err => console.log(err.stack || err));
 

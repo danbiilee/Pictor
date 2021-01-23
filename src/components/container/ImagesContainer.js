@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
+  getParticles,
   deleteParticle,
   addSelectedParticle,
   deleteSelectedParticle,
@@ -11,20 +12,56 @@ import {
 import styled from 'styled-components';
 
 import TopButtons from '../layout/tabArea/TopButtons';
+import TopFilter from '../layout/tabArea/TopFilter';
 import Contents from '../layout/tabArea/Contents';
 import FileUploader from '../feature/FileUploader';
 import Images from './Images';
 import Button from '../common/Button';
 import SVG from '../common/SVG';
+import Select from '../common/Select';
 
 const ButtonInner = styled.div`
   display: flex;
   align-items: center;
 `;
 
+const addTypeList = (images, typeList) => {
+  for (let img of images) {
+    const optionName = img.type === 'origin' ? '원본' : '크롭';
+    if (!typeList.find(t => t.type === img.type)) {
+      typeList.push({ type: img.type, optionName });
+    }
+  }
+  return typeList;
+};
+
 const ImagesContainer = () => {
-  //console.log('ImagesContainer');
   const dispatch = useDispatch();
+  const { particles } = useSelector(state => state.particles);
+
+  // 이미지 type으로 필터링하기 위한 배열
+  let typeList = [
+    {
+      type: 'all',
+      optionName: '전체',
+    },
+  ];
+  // particles가 바뀌었을 때만 실행
+  typeList = useMemo(() => addTypeList(particles, typeList), [particles]);
+
+  //console.log('ImagesContainer', particles, typeList);
+
+  // 첫 마운트 후 indexedDB 값 리덕스 스토어에 셋팅
+  useEffect(() => {
+    if (!particles || !particles.length) {
+      dispatch(getParticles());
+      //console.log('ImagesContainer mount');
+    }
+  }, []);
+
+  // 필터링 type 값 관리
+  const [selectedType, setSelectedType] = useState(typeList[0].type);
+  const onChange = e => setSelectedType(e.target.value);
 
   // 선택 이미지 리스트 관리
   const [selectedList, setSelectedList] = useState([]);
@@ -82,8 +119,15 @@ const ImagesContainer = () => {
           </Button>
         </ButtonInner>
       </TopButtons>
+      <TopFilter>
+        <Select data={typeList} onChange={onChange} />
+      </TopFilter>
       <Contents>
-        <Images selectedList={selectedList} onToggle={onToggle} />
+        <Images
+          selectedType={selectedType}
+          selectedList={selectedList}
+          onToggle={onToggle}
+        />
       </Contents>
     </>
   );

@@ -161,7 +161,8 @@ button {
   outline: 0;
   cursor: pointer;
 }
-input, textarea {
+input, textarea, select, option {
+  background: none;
   padding: 0;
   color: #333;
   border: 0;

@@ -28,7 +28,7 @@ const Label = styled.label`
 `;
 
 const FileUploader = () => {
-  console.log('FileUploader');
+  //console.log('FileUploader');
 
   const fileRef = useRef();
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const FileUploader = () => {
     let reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.addEventListener('load', () =>
-      dispatch(addParticle({ file: reader.result })),
+      dispatch(addParticle({ type: 'origin', src: reader.result })),
     ); // 바로 indexedDB에 저장
     fileRef.current.value = '';
   };

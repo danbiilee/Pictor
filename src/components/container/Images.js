@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { getParticles } from '../../redux/particles';
 
 import Button from '../common/Button';
 import SVG from '../common/SVG';
@@ -21,7 +20,7 @@ const Li = styled.li`
 const Img = styled.img`
   width: 100%;
   height: 130px;
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const SelectBlock = styled.div`
@@ -32,39 +31,45 @@ const SelectBlock = styled.div`
   background: rgba(0, 0, 0, 0.4);
 `;
 
-const ImageList = ({ selectedList, onToggle }) => {
-  //let particles = useSelector(state => selectParticles(state.particles));
-  const { particles } = useSelector(state => state.particles);
-  const dispatch = useDispatch();
+const filterListByType = (particles, type) => {
+  let result;
+  if (type === 'all') {
+    result = particles;
+  } else {
+    result = particles.filter(p => p.type === type);
+  }
+  return result;
+};
 
-  // 마운트 후 indexedDB 값 리덕스 스토어에 셋팅
-  useEffect(() => {
-    if (!particles || !particles.length) {
-      dispatch(getParticles());
-      //console.log('ImageList dispatch');
-    }
-    //console.log('ImageList mount');
-  }, []);
+const Images = ({ selectedType, selectedList, onToggle }) => {
+  const dispatch = useDispatch();
+  const { particles } = useSelector(state => state.particles);
+
+  // 렌더링될 이미지 필터링
+  let filteredImages = useMemo(
+    () => filterListByType(particles, selectedType),
+    [particles, selectedType],
+  );
 
   // 선택여부 속성 추가
-  const filteredList = particles.map(p => {
-    const check = selectedList.includes(p.id);
-    return check ? { ...p, isSelected: true } : { ...p, isSelected: false };
+  filteredImages = filteredImages.map(img => {
+    const check = selectedList.includes(img.id);
+    return check ? { ...img, isSelected: true } : { ...img, isSelected: false };
   });
 
-  //console.log('ImageList', filteredList, selectedList);
+  //console.log('ImageList', selectedType, particles, filteredImages);
 
   return (
     <Ul>
-      {filteredList && filteredList.length
-        ? filteredList.map(particle => (
+      {filteredImages && filteredImages.length
+        ? filteredImages.map(img => (
             <Li
-              key={particle.id}
-              isSelected={particle.isSelected}
-              onClick={() => onToggle(particle.id)}
+              key={img.id}
+              isSelected={img.isSelected}
+              onClick={() => onToggle(img.id)}
             >
-              <SelectBlock isSelected={particle.isSelected} />
-              <Img alt="particle example" src={particle.file} />
+              <SelectBlock isSelected={img.isSelected} />
+              <Img alt="uploaded image" src={img.src} />
             </Li>
           ))
         : null}
@@ -72,4 +77,4 @@ const ImageList = ({ selectedList, onToggle }) => {
   );
 };
 
-export default ImageList;
+export default Images;
