@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSelectedCrop, addParticle } from '../../redux/particles';
+import { deleteSelectedCrop, addPicture } from '../../redux/pictures';
 
 import TopButtons from '../layout/tabArea/TopButtons';
 import Contents from '../layout/tabArea/Contents';
@@ -9,7 +9,7 @@ import Canvas from '../common/Canvas';
 
 const CanvasContainer = () => {
   const dispatch = useDispatch();
-  const { selectedCrop } = useSelector(state => state.particles);
+  const { selectedCrop } = useSelector(state => state.pictures);
 
   const [activeTarget, setActiveTarget] = useState('');
   const [myCanvas, setMyCanvas] = useState(null);
@@ -29,7 +29,7 @@ const CanvasContainer = () => {
   };
 
   const onSave = () => {
-    dispatch(addParticle({ type: 'cropped', src: myCanvas.cropImgSrc }));
+    dispatch(addPicture({ type: 'cropped', src: myCanvas.cropImgSrc }));
   };
 
   return (

@@ -27,7 +27,7 @@ const App = () => {
   //console.log('App');
   return (
     <Main>
-      <h1>PARTICLE MAKER</h1>
+      <h1>Pictor</h1>
       <Wrapper>
         <TabArea title="IMAGES">
           <ImagesContainer />

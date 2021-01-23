@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  getParticles,
-  deleteParticle,
-  addSelectedParticle,
-  deleteSelectedParticle,
-  clearSelectedParticle,
+  getPictures,
+  deletePicture,
+  addSelectedPicture,
+  deleteSelectedPicture,
+  clearSelectedPicture,
   addSelectedCrop,
   deleteSelectedCrop,
-} from '../../redux/particles';
+} from '../../redux/pictures';
 import styled from 'styled-components';
 
 import TopButtons from '../layout/tabArea/TopButtons';
@@ -25,11 +25,11 @@ const ButtonInner = styled.div`
   align-items: center;
 `;
 
-const addTypeList = (images, typeList) => {
-  for (let img of images) {
-    const optionName = img.type === 'origin' ? '원본' : '크롭';
-    if (!typeList.find(t => t.type === img.type)) {
-      typeList.push({ type: img.type, optionName });
+const addTypeList = (pictures, typeList) => {
+  for (let pic of pictures) {
+    const optionName = pic.type === 'origin' ? '원본' : '크롭';
+    if (!typeList.find(t => t.type === pic.type)) {
+      typeList.push({ type: pic.type, optionName });
     }
   }
   return typeList;
@@ -37,7 +37,7 @@ const addTypeList = (images, typeList) => {
 
 const ImagesContainer = () => {
   const dispatch = useDispatch();
-  const { particles } = useSelector(state => state.particles);
+  const { pictures } = useSelector(state => state.pictures);
 
   // 이미지 type으로 필터링하기 위한 배열
   let typeList = [
@@ -46,15 +46,15 @@ const ImagesContainer = () => {
       optionName: '전체',
     },
   ];
-  // particles가 바뀌었을 때만 실행
-  typeList = useMemo(() => addTypeList(particles, typeList), [particles]);
+  // pictures가 바뀌었을 때만 실행
+  typeList = useMemo(() => addTypeList(pictures, typeList), [pictures]);
 
-  //console.log('ImagesContainer', particles, typeList);
+  //console.log('ImagesContainer', pictures, typeList);
 
   // 첫 마운트 후 indexedDB 값 리덕스 스토어에 셋팅
   useEffect(() => {
-    if (!particles || !particles.length) {
-      dispatch(getParticles());
+    if (!pictures || !pictures.length) {
+      dispatch(getPictures());
       //console.log('ImagesContainer mount');
     }
   }, []);
@@ -68,17 +68,17 @@ const ImagesContainer = () => {
   const onToggle = id => {
     if (selectedList.includes(id)) {
       setSelectedList(selectedList.filter(item => item !== id));
-      dispatch(deleteSelectedParticle(id));
+      dispatch(deleteSelectedPicture(id));
     } else {
       setSelectedList(selectedList.concat(id));
-      dispatch(addSelectedParticle(id));
+      dispatch(addSelectedPicture(id));
     }
   };
 
   const onDelete = () => {
     setSelectedList([]);
-    dispatch(clearSelectedParticle());
-    dispatch(deleteParticle(selectedList));
+    dispatch(clearSelectedPicture());
+    dispatch(deletePicture(selectedList));
   };
 
   const onCrop = () => {
@@ -89,7 +89,7 @@ const ImagesContainer = () => {
     if (selectedList.length > 1) {
       alert('⚠ 이미지 크롭은 한 번에 하나만 가능합니다 ⚠');
       setSelectedList([]);
-      dispatch(clearSelectedParticle());
+      dispatch(clearSelectedPicture());
       dispatch(deleteSelectedCrop());
       return;
     }

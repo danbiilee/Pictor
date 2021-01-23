@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
-import particles, { particleSaga } from './particles';
+import pictures, { pictureSaga } from './pictures';
 
-const rootReducer = combineReducers({ particles });
+const rootReducer = combineReducers({ pictures });
 
 export function* rootSaga() {
-  yield all([particleSaga()]);
+  yield all([pictureSaga()]);
 }
 
 export default rootReducer;

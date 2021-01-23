@@ -31,25 +31,25 @@ const SelectBlock = styled.div`
   background: rgba(0, 0, 0, 0.4);
 `;
 
-const filterListByType = (particles, type) => {
+const filterListByType = (pictures, type) => {
   let result;
   if (type === 'all') {
-    result = particles;
+    result = pictures;
   } else {
-    result = particles.filter(p => p.type === type);
+    result = pictures.filter(pic => pic.type === type);
   }
   return result;
 };
 
 const Images = ({ selectedType, selectedList, onToggle }) => {
   const dispatch = useDispatch();
-  const { particles } = useSelector(state => state.particles);
+  const { pictures } = useSelector(state => state.pictures);
 
   // 렌더링될 이미지 필터링
-  let filteredImages = useMemo(
-    () => filterListByType(particles, selectedType),
-    [particles, selectedType],
-  );
+  let filteredImages = useMemo(() => filterListByType(pictures, selectedType), [
+    pictures,
+    selectedType,
+  ]);
 
   // 선택여부 속성 추가
   filteredImages = filteredImages.map(img => {
@@ -57,7 +57,7 @@ const Images = ({ selectedType, selectedList, onToggle }) => {
     return check ? { ...img, isSelected: true } : { ...img, isSelected: false };
   });
 
-  //console.log('ImageList', selectedType, particles, filteredImages);
+  //console.log('ImageList', selectedType, pictures, filteredImages);
 
   return (
     <Ul>

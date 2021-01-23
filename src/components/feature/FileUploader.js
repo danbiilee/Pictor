@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { addParticle } from '../../redux/particles';
+import { addPicture } from '../../redux/pictures';
 import styled from 'styled-components';
 
 import SVG from '../common/SVG';
@@ -37,7 +37,7 @@ const FileUploader = () => {
     let reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.addEventListener('load', () =>
-      dispatch(addParticle({ type: 'origin', src: reader.result })),
+      dispatch(addPicture({ type: 'origin', src: reader.result })),
     ); // 바로 indexedDB에 저장
     fileRef.current.value = '';
   };

@@ -12,8 +12,8 @@ const CanvasBlock = styled.canvas`
 `;
 
 const Canvas = ({ activeTarget, setMyCanvas }) => {
-  const { particles, selectedParticles, selectedCrop } = useSelector(
-    state => state.particles,
+  const { pictures, selectedPictures, selectedCrop } = useSelector(
+    state => state.pictures,
   );
   //console.log('Canvas', activeTarget);
 
@@ -42,7 +42,7 @@ const Canvas = ({ activeTarget, setMyCanvas }) => {
       console.log('crop!!!!');
 
       // myCanvas 생성
-      const cropImgSrc = particles.find(item => item.id === selectedCrop).src;
+      const cropImgSrc = pictures.find(pic => pic.id === selectedCrop).src;
       const my = new MyCanvas(
         wrapperRef.current,
         canvasRef.current,
