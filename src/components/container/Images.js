@@ -32,6 +32,10 @@ const SelectBlock = styled.div`
 `;
 
 const filterListByType = (pictures, type) => {
+  if (!pictures || !pictures.length) {
+    return pictures;
+  }
+
   let result;
   if (type === 'all') {
     result = pictures;
@@ -52,10 +56,14 @@ const Images = ({ selectedType, selectedList, onToggle }) => {
   ]);
 
   // 선택여부 속성 추가
-  filteredImages = filteredImages.map(img => {
-    const check = selectedList.includes(img.id);
-    return check ? { ...img, isSelected: true } : { ...img, isSelected: false };
-  });
+  if (filteredImages && filteredImages.length) {
+    filteredImages = filteredImages.map(img => {
+      const check = selectedList.includes(img.id);
+      return check
+        ? { ...img, isSelected: true }
+        : { ...img, isSelected: false };
+    });
+  }
 
   //console.log('ImageList', selectedType, pictures, filteredImages);
 

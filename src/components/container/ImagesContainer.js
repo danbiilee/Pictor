@@ -26,6 +26,10 @@ const ButtonInner = styled.div`
 `;
 
 const addTypeList = (pictures, typeList) => {
+  if (!pictures || !pictures.length) {
+    return typeList;
+  }
+
   for (let pic of pictures) {
     const optionName = pic.type === 'origin' ? '원본' : '크롭';
     if (!typeList.find(t => t.type === pic.type)) {
@@ -55,7 +59,6 @@ const ImagesContainer = () => {
   useEffect(() => {
     if (!pictures || !pictures.length) {
       dispatch(getPictures());
-      //console.log('ImagesContainer mount');
     }
   }, []);
 

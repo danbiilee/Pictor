@@ -3,10 +3,10 @@ import * as api from '../indexedDB/pictures';
 
 export function* getPicturesSaga() {
   try {
-    const particles = yield call(api.getPictures);
+    const pictures = yield call(api.initIdb);
     yield put({
-      type: 'GET_PARTICLES_SUCCESS',
-      payload: particles,
+      type: 'GET_PICTURES_SUCCESS',
+      payload: pictures,
     }); // 액션 디스패치
   } catch (e) {
     console.log('getPicturesSaga Error', e);
@@ -15,7 +15,7 @@ export function* getPicturesSaga() {
 
 export function* addPictureSaga(action) {
   try {
-    // Dexie로 자동 생성되는 pk값 얻을 수 있음
+    // 자동 생성되는 pk값 얻을 수 있음
     const result = yield call(api.addPicture, action.payload);
     yield put({
       type: 'ADD_PICTURE_SUCCESS',
