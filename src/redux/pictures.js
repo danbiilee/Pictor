@@ -14,35 +14,43 @@ const ADD_PICTURE_SUCCESS = 'ADD_PICTURE_SUCCESS';
 const DELETE_PICTURE = 'DELETE_PICTURE';
 const DELETE_PICTURE_SUCCESS = 'DELETE_PICTURE_SUCCESS';
 
-const ADD_SELECTED_PICTURE = 'ADD_SELECTED_PICTURE';
-const DELETE_SELECTED_PICTURE = 'DELETE_SELECTED_PICTURE';
-const CLEAR_SELECTED_PICTURE = 'CLEAR_SELECTED_PICTURE';
+const ADD_SELECTED_PICTURES = 'ADD_SELECTED_PICTURES';
+const DELETE_SELECTED_PICTURES = 'DELETE_SELECTED_PICTURES';
+const CLEAR_SELECTED_PICTURES = 'CLEAR_SELECTED_PICTURES';
 
-const ADD_SELECTED_CROP = 'ADD_SELECTED_CROP';
-const DELETE_SELECTED_CROP = 'DELETE_SELECTED_CROP';
+const CHANGE_DRWAN_PICTURE = 'CHANGE_DRWAN_PICTURE';
+const CHANGE_CANVAS_MODE = 'CHANGE_CANVAS_MODE';
+const CHANGE_PROPERTIES = 'CHANGE_PROPERTIES';
 
 export const getPictures = () => ({ type: GET_PICTURES });
 
 export const addPicture = payload => ({ type: ADD_PICTURE, payload });
 export const deletePicture = payload => ({ type: DELETE_PICTURE, payload });
 
-export const addSelectedPicture = payload => ({
-  type: ADD_SELECTED_PICTURE,
+export const addSelectedPictures = payload => ({
+  type: ADD_SELECTED_PICTURES,
   payload,
 });
-export const deleteSelectedPicture = payload => ({
-  type: DELETE_SELECTED_PICTURE,
+export const deleteSelectedPictures = payload => ({
+  type: DELETE_SELECTED_PICTURES,
   payload,
 });
-export const clearSelectedPicture = () => ({
-  type: CLEAR_SELECTED_PICTURE,
+export const clearSelectedPictures = () => ({
+  type: CLEAR_SELECTED_PICTURES,
 });
 
-export const addSelectedCrop = payload => ({
-  type: ADD_SELECTED_CROP,
+export const changeDrawnPicture = payload => ({
+  type: CHANGE_DRWAN_PICTURE,
   payload,
 });
-export const deleteSelectedCrop = () => ({ type: DELETE_SELECTED_CROP });
+export const changeCanvasMode = payload => ({
+  type: CHANGE_CANVAS_MODE,
+  payload,
+});
+export const changeProperties = payload => ({
+  type: CHANGE_PROPERTIES,
+  payload,
+});
 
 export function* pictureSaga() {
   yield takeEvery(GET_PICTURES, getPicturesSaga);
@@ -52,8 +60,18 @@ export function* pictureSaga() {
 
 const initialState = {
   pictures: [],
-  selectedPictures: [],
-  selectedCrop: null,
+  selectedPictures: [], // 삭제
+  drawnPicture: null,
+  canvasMode: null,
+  properties: {
+    color: '#ffffff',
+    canvasWidth: 0,
+    canvasHeight: 0,
+    imgWidth: 0,
+    imgHeight: 0,
+    gap: 50,
+    type: 'vanilla',
+  },
 };
 
 export default function pictures(state = initialState, action) {
@@ -70,32 +88,37 @@ export default function pictures(state = initialState, action) {
         ...state,
         pictures: state.pictures.concat(action.payload),
       };
-    case ADD_SELECTED_PICTURE:
+    case ADD_SELECTED_PICTURES:
       return {
         ...state,
         selectedPictures: state.selectedPictures.concat(action.payload),
       };
-    case DELETE_SELECTED_PICTURE:
+    case DELETE_SELECTED_PICTURES:
       return {
         ...state,
         selectedPictures: state.selectedPictures.filter(
           item => item !== action.payload,
         ),
       };
-    case CLEAR_SELECTED_PICTURE:
+    case CLEAR_SELECTED_PICTURES:
       return {
         ...state,
         selectedPictures: [],
       };
-    case ADD_SELECTED_CROP:
+    case CHANGE_DRWAN_PICTURE:
       return {
         ...state,
-        selectedCrop: action.payload,
+        drawnPicture: action.payload,
       };
-    case DELETE_SELECTED_CROP:
+    case CHANGE_CANVAS_MODE:
       return {
         ...state,
-        selectedCrop: null,
+        canvasMode: action.payload,
+      };
+    case CHANGE_PROPERTIES:
+      return {
+        ...state,
+        properties: action.payload,
       };
     default:
       return state;

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addPicture } from '../../redux/pictures';
 import styled from 'styled-components';
 
-import SVG from '../common/SVG';
+import SVG from './SVG';
 
 const FileInput = styled.input.attrs(props => ({
   type: 'file',

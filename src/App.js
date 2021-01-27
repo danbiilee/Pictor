@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import TabArea from './components/layout/tabArea';
-import ImagesContainer from './components/container/ImagesContainer';
-import CanvasContainer from './components/container/CanvasContainer';
+import TabAreaContainer from './components/layout/TabAreaContainer';
 
 const Main = styled.main`
   display: flex;
@@ -29,12 +26,8 @@ const App = () => {
     <Main>
       <h1>Pictor</h1>
       <Wrapper>
-        <TabArea title="IMAGES">
-          <ImagesContainer />
-        </TabArea>
-        <TabArea title="CANVAS">
-          <CanvasContainer />
-        </TabArea>
+        <TabAreaContainer target="SIDEBAR" />
+        <TabAreaContainer target="CANVAS" />
       </Wrapper>
     </Main>
   );

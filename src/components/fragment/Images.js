@@ -6,7 +6,18 @@ import Button from '../common/Button';
 import SVG from '../common/SVG';
 
 const Ul = styled.ul`
+  overflow-y: auto;
+  flex: 1 0 500px;
   padding: 3px;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--border-light-gray);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--dark-gray);
+  }
 `;
 const Li = styled.li`
   position: relative;

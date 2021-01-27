@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import * as api from '../indexedDB/pictures';
+import * as api from '../idb/pictures';
 
 export function* getPicturesSaga() {
   try {

@@ -1,8 +1,8 @@
-export function MyCanvas(wrapper, canvas, ctx, cropImgSrc) {
+export function MyCanvas(wrapper, canvas, ctx, drawnImgSrc) {
   this.wrapper = wrapper;
   this.canvas = canvas;
   this.ctx = ctx;
-  this.cropImgSrc = cropImgSrc;
+  this.drawnImgSrc = drawnImgSrc;
 
   this.offsetX = canvas.offsetLeft;
   this.offsetY = canvas.offsetTop;
@@ -13,26 +13,42 @@ export function MyCanvas(wrapper, canvas, ctx, cropImgSrc) {
 // 크롭할 이미지 로드하기
 MyCanvas.prototype.initCropImage = function () {
   //const my = this;
-  this.cropImg = new Image();
-  this.cropImg.src = this.cropImgSrc;
-  // this.cropImg.onload = function () {
-  //   // resize canvas to fit the img
-  //   // cw=canvas.width=img.width;
-  //   // ch=canvas.height=img.height;
-  //   my.drawImage(alpha);
+  this.drawnImg = new Image();
+  this.drawnImg.src = this.drawnImgSrc;
+};
 
-  //   // 그리기 이벤트 감지
-  //   my.canvas.addEventListener('mousedown', function (e) {
-  //     my.handleMouseDown(e);
-  //   });
-  // };
+// 이미지 비율 유지
+const getSizeToKeepImageScale = (img, canvas) => {
+  const ratio = img.width / img.height;
+  let newWidth = canvas.width;
+
+  let newHeight = newWidth / ratio;
+  if (newHeight > canvas.height) {
+    newHeight = canvas.height;
+    newWidth = newHeight * ratio;
+  }
+  return { newWidth, newHeight };
 };
 
 // 이미지 그리기 (투명도 설정)
 MyCanvas.prototype.drawImage = function (alpha) {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   this.ctx.globalAlpha = alpha; // 투명도 설정
-  this.ctx.drawImage(this.cropImg, 0, 0, this.canvas.width, this.canvas.height);
+
+  // 그리기
+  if (
+    this.drawnImg.width < this.canvas.width &&
+    this.drawnImg.height < this.canvas.height
+  ) {
+    this.ctx.drawImage(this.drawnImg, 0, 0);
+  } else {
+    // 비율 유지
+    const { newWidth, newHeight } = getSizeToKeepImageScale(
+      this.drawnImg,
+      this.canvas,
+    );
+    this.ctx.drawImage(this.drawnImg, 0, 0, newWidth, newHeight);
+  }
   this.ctx.globalAlpha = 1.0;
 };
 
@@ -42,8 +58,11 @@ MyCanvas.prototype.handleMouseDown = function (e) {
   e.stopPropagation();
 
   // 마우스 좌표값 계산
-  const x = parseInt(e.clientX - this.offsetX);
-  const y = parseInt(e.clientY - this.offsetY);
+  let x = parseInt(e.clientX - this.offsetX);
+  let y = parseInt(e.clientY - this.offsetY);
+  if (document.documentElement.scrollTop > 0) {
+    y += document.documentElement.scrollTop;
+  } // 세로 스크롤값 적용
 
   this.points.push({ x, y });
 
@@ -92,7 +111,6 @@ MyCanvas.prototype.crop = function () {
     if (p.x > maxX) maxX = p.x;
     if (p.y > maxY) maxY = p.y;
   }
-  //console.log('clipping area points', minX, minY, maxX, maxY);
   const clippedWidth = maxX - minX;
   const clippedHeight = maxY - minY;
 
@@ -108,8 +126,8 @@ MyCanvas.prototype.crop = function () {
   }
   this.ctx.closePath();
 
-  this.ctx.clip();
-  this.ctx.drawImage(this.cropImg, 0, 0, this.canvas.width, this.canvas.height);
+  this.ctx.clip(); // 클립
+  this.drawImage(1.0); // 클리핑한 이미지 그리기
   this.ctx.restore();
 
   // 캔버스 생성
@@ -118,7 +136,6 @@ MyCanvas.prototype.crop = function () {
   // 사이즈를 클리핑 영역에 맞추기
   c.width = clippedWidth;
   c.height = clippedHeight;
-  //console.log('new canvas size', c.width, c.height);
 
   // 새로운 캔버스에 크롭이미지 그리기
   cx.drawImage(
@@ -134,29 +151,76 @@ MyCanvas.prototype.crop = function () {
   );
 
   // 새로운 이미지 생성. 기존 크롭이미지 대체
-  this.cropImgSrc = c.toDataURL();
+  this.drawnImgSrc = c.toDataURL();
   this.isCropped = !this.isCropped;
-  console.log('crop(): crop 됐다!!!!!');
-
-  // indexedDB에 저장
-
-  // try {
-  //   dispatch(addParticle({ file: this.cropImgSrc }));
-  //   if (result) {
-  //     this.loadImg(1.0); // 이미지 로드 + 그리기
-  //   }
-  // } catch (e) {
-  //   console.log('Error: Saving Cropped Image', e);
-  // }
-
-  // const my = this;
-  // this.cropImg = new Image();
-  // this.cropImg.src = c.toDataURL();
-  // this.cropImg.onload = function () {
-  //   // 새 이미지 페이지에 삽입하기
-  //   my.wrapper.appendChild(this);
-  // };
 
   // 이전 포인트 지우기
   this.points.length = 0;
+};
+
+MyCanvas.prototype.makePattern = function (prop = null) {
+  // 패턴 설정값
+  let {
+    color,
+    canvasWidth,
+    canvasHeight,
+    imgWidth,
+    imgHeight,
+    gap,
+    type,
+  } = prop;
+  canvasWidth = parseInt(canvasWidth ? canvasWidth : this.canvas.width, 10);
+  canvasHeight = parseInt(canvasHeight ? canvasWidth : this.canvas.height, 10);
+  imgWidth = parseInt(imgWidth ? imgWidth : this.drawnImg.width, 10);
+  imgHeight = parseInt(imgHeight ? imgHeight : this.drawnImg.height, 10);
+  gap = parseInt(gap, 10);
+
+  this.ctx.save();
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+  // 배경색 설정
+  this.ctx.beginPath();
+  this.ctx.fillStyle = color;
+  this.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+  this.ctx.closePath();
+
+  // 이미지 뿌리기
+  const loopX = Math.ceil(canvasWidth / (gap + imgWidth));
+  const loopY = Math.ceil(canvasHeight / (gap + imgHeight));
+
+  console.log('makePattern', canvasWidth, gap, imgWidth, loopX, loopY);
+
+  let y = 0;
+  for (let i = 0; i < loopY; i++) {
+    // 행
+    let x = i % 2 === 0 ? 0 : gap;
+    for (let j = 0; j < loopX; j++) {
+      // 열
+      this.ctx.drawImage(this.drawnImg, x, y, imgWidth, imgHeight); // height는 오토로
+      x += imgWidth + gap;
+    }
+    y += imgHeight + gap;
+    console.log(x, y);
+  }
+  this.ctx.restore();
+
+  // 캔버스 생성
+  const c = document.createElement('canvas');
+  const cx = c.getContext('2d');
+  // 사이즈 설정(prop.bgWidth, prop.bgHeight)
+  c.width = canvasWidth;
+  c.height = canvasHeight;
+
+  // 새로운 캔버스에 패턴 그리기
+  cx.drawImage(this.canvas, 0, 0, canvasWidth, canvasHeight);
+  this.drawnImgSrc = c.toDataURL();
+  //this.drawImage(1.0);
+
+  // const my = this;
+  // const img = new Image();
+  // img.src = c.toDataURL();
+  // img.onload = function () {
+  //   // 새 이미지 페이지에 삽입하기
+  //   my.wrapper.appendChild(this);
+  // };
 };

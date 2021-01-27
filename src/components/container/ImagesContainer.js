@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getPictures,
   deletePicture,
-  addSelectedPicture,
-  deleteSelectedPicture,
-  clearSelectedPicture,
-  addSelectedCrop,
-  deleteSelectedCrop,
+  addSelectedPictures,
+  deleteSelectedPictures,
+  clearSelectedPictures,
+  changeDrawnPicture,
+  changeCanvasMode,
 } from '../../redux/pictures';
 import styled from 'styled-components';
 
-import TopButtons from '../layout/tabArea/TopButtons';
-import TopFilter from '../layout/tabArea/TopFilter';
-import Contents from '../layout/tabArea/Contents';
-import FileUploader from '../feature/FileUploader';
-import Images from './Images';
+import TopButtons from '../layout/TopButtons';
+import TopFilter from '../layout/TopFilter';
+import Contents from '../layout/Contents';
+import FileUploader from '../common/FileUploader';
+import Images from '../fragment/Images';
 import Button from '../common/Button';
 import SVG from '../common/SVG';
 import Select from '../common/Select';
@@ -31,7 +31,12 @@ const addTypeList = (pictures, typeList) => {
   }
 
   for (let pic of pictures) {
-    const optionName = pic.type === 'origin' ? '원본' : '크롭';
+    // canvasMode: origin, crop, pattern
+    let optionName = '';
+    if (pic.type === 'crop') optionName = '크롭';
+    else if (pic.type === 'pattern') optionName = '패턴';
+    else optionName = '원본';
+
     if (!typeList.find(t => t.type === pic.type)) {
       typeList.push({ type: pic.type, optionName });
     }
@@ -41,7 +46,7 @@ const addTypeList = (pictures, typeList) => {
 
 const ImagesContainer = () => {
   const dispatch = useDispatch();
-  const { pictures } = useSelector(state => state.pictures);
+  const { pictures, drawnPicture } = useSelector(state => state.pictures);
 
   // 이미지 type으로 필터링하기 위한 배열
   let typeList = [
@@ -66,37 +71,38 @@ const ImagesContainer = () => {
   const [selectedType, setSelectedType] = useState(typeList[0].type);
   const onChange = e => setSelectedType(e.target.value);
 
-  // 선택 이미지 리스트 관리
+  // 선택 이미지 리스트(삭제용) 관리
   const [selectedList, setSelectedList] = useState([]);
   const onToggle = id => {
     if (selectedList.includes(id)) {
       setSelectedList(selectedList.filter(item => item !== id));
-      dispatch(deleteSelectedPicture(id));
+      dispatch(deleteSelectedPictures(id));
     } else {
       setSelectedList(selectedList.concat(id));
-      dispatch(addSelectedPicture(id));
+      dispatch(addSelectedPictures(id));
     }
+    dispatch(changeDrawnPicture(id));
+    dispatch(changeCanvasMode(null));
   };
 
   const onDelete = () => {
-    setSelectedList([]);
-    dispatch(clearSelectedPicture());
     dispatch(deletePicture(selectedList));
+    dispatch(clearSelectedPictures());
+
+    // 캔버스에서도 삭제
+    if (selectedList.includes(drawnPicture)) {
+      dispatch(changeDrawnPicture(null));
+      dispatch(changeCanvasMode('clear'));
+    }
+    setSelectedList([]);
   };
 
   const onCrop = () => {
-    if (!selectedList.length) {
+    if (!drawnPicture) {
       alert('⚠ 이미지를 선택해주세요 ⚠');
       return;
     }
-    if (selectedList.length > 1) {
-      alert('⚠ 이미지 크롭은 한 번에 하나만 가능합니다 ⚠');
-      setSelectedList([]);
-      dispatch(clearSelectedPicture());
-      dispatch(deleteSelectedCrop());
-      return;
-    }
-    dispatch(addSelectedCrop(selectedList[0]));
+    dispatch(changeCanvasMode('crop'));
   };
 
   return (
@@ -136,4 +142,4 @@ const ImagesContainer = () => {
   );
 };
 
-export default ImagesContainer;
+export default React.memo(ImagesContainer);
