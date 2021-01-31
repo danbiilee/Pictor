@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import Tabs from './Tabs';
-import ImagesContainer from '../container/ImagesContainer';
-import PatternsContainer from '../container/PatternsContainer';
-import CanvasContainer from '../container/CanvasContainer';
+import Tabs from '../parts/tabPanel/Tabs';
+import ImagesContainer from './ImagesContainer';
+import PatternsContainer from './PatternsContainer';
+import CanvasContainer from './CanvasContainer';
 
 const Wrapper = styled.section`
   display: flex;
@@ -22,7 +22,7 @@ const ContentsWrapper = styled.div`
   border: 2px solid var(--border-dark-gray);
 `;
 
-const TabArea = ({ target }) => {
+const TabPanel = ({ target }) => {
   const { drawnPicture } = useSelector(state => state.pictures);
   const tabs = target === 'SIDEBAR' ? ['IMAGES', 'PATTERN'] : ['CANVAS'];
   const tabCompObj =
@@ -44,4 +44,4 @@ const TabArea = ({ target }) => {
   );
 };
 
-export default React.memo(TabArea);
+export default React.memo(TabPanel);

@@ -11,11 +11,11 @@ import {
 } from '../../redux/pictures';
 import styled from 'styled-components';
 
-import TopButtons from '../layout/TopButtons';
-import TopFilter from '../layout/TopFilter';
-import Contents from '../layout/Contents';
+import TopButtons from '../parts/tabPanel/TopButtons';
+import TopFilter from '../parts/tabPanel/TopFilter';
+import Contents from '../parts/tabPanel/Contents';
 import FileUploader from '../common/FileUploader';
-import Images from '../fragment/Images';
+import Images from '../parts/Images';
 import Button from '../common/Button';
 import SVG from '../common/SVG';
 import Select from '../common/Select';

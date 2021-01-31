@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  // flex: 1 1 500px;
+  flex: 1 1 500px;
   // overflow-y: auto;
   display: flex;
   flex-direction: column;

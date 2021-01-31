@@ -7,9 +7,9 @@ import {
   changeDrawnPicture,
 } from '../../redux/pictures';
 
-import Images from '../fragment/Images';
-import TopButtons from '../layout/TopButtons';
-import Contents from '../layout/Contents';
+import Images from '../parts/Images';
+import TopButtons from '../parts/tabPanel/TopButtons';
+import Contents from '../parts/tabPanel/Contents';
 import Button from '../common/Button';
 import SVG from '../common/SVG';
 import Input from '../common/Input';
@@ -108,8 +108,11 @@ const SettingsContainer = () => {
       return;
     }
     // 배경사이즈 적용은 width, height 둘 다 입력했을 때만
-    const canvasSize = keys.current.includes('canvasWidth') && keys.current.includes('canvasWidth');
-    const imgSize = keys.current.includes('imgWidth') && keys.current.includes('imgWidth');
+    const canvasSize =
+      keys.current.includes('canvasWidth') &&
+      keys.current.includes('canvasWidth');
+    const imgSize =
+      keys.current.includes('imgWidth') && keys.current.includes('imgWidth');
     console.log('properties changed', keys.current, properties);
     dispatch(changeProperties(properties));
   }, [properties, dispatch]);
