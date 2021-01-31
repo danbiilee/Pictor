@@ -6,10 +6,10 @@ import {
   addPicture,
 } from '../../redux/pictures';
 
-import TopButtons from '../layout/TopButtons';
-import Contents from '../layout/Contents';
+import TopButtons from '../parts/tabPanel/TopButtons';
+import Contents from '../parts/tabPanel/Contents';
 import Button from '../common/Button';
-import Canvas from '../fragment/Canvas';
+import Canvas from '../parts/Canvas';
 
 const CanvasContainer = () => {
   console.log('CanvasContainer');
