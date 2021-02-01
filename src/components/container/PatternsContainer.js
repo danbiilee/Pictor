@@ -8,8 +8,8 @@ import {
 } from '../../redux/pictures';
 
 import Images from '../parts/Images';
-import TopButtons from '../parts/tabPanel/TopButtons';
-import Contents from '../parts/tabPanel/Contents';
+import TopButtons from '../layout/tabPanel/TopButtons';
+import Content from '../layout/tabPanel/Content';
 import Button from '../common/Button';
 import SVG from '../common/SVG';
 import Input from '../common/Input';
@@ -182,7 +182,7 @@ const SettingsContainer = () => {
           </Button>
         </ButtonInner>
       </TopButtons>
-      <Contents>
+      <Content>
         <ContentsInner>
           <Settings>
             <InnerBlock>
@@ -312,7 +312,7 @@ const SettingsContainer = () => {
             </InnerBlock>
           </Settings>
         </ContentsInner>
-      </Contents>
+      </Content>
     </>
   );
 };

@@ -9,9 +9,8 @@ const GlobalStyle = createGlobalStyle`
   --border-light-gray: #aaaaaaba;
   --lightest-gray: #eee;
 }
-html, body, #root {
-  width: 100%;
-  height: 100%;
+* {
+  box-sizing: border-box;
   &::-webkit-scrollbar {
     width: 10px;
   }
@@ -22,12 +21,13 @@ html, body, #root {
     background-color: var(--dark-gray);
   }
 }
+html, body, #root {
+  width: 100vw;
+  height: 100vh;
+}
 body {
   color: var(--lightest-gray);
   font-family: 'Noto Sans KR', sans-serif;
-}
-* {
-  box-sizing: border-box;
 }
 a,
 abbr,

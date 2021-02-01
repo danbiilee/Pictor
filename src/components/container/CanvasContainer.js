@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changeDrawnPicture,
@@ -6,13 +6,13 @@ import {
   addPicture,
 } from '../../redux/pictures';
 
-import TopButtons from '../parts/tabPanel/TopButtons';
-import Contents from '../parts/tabPanel/Contents';
+import TopButtons from '../layout/tabPanel/TopButtons';
+import Content from '../layout/tabPanel/Content';
 import Button from '../common/Button';
 import Canvas from '../parts/Canvas';
 
 const CanvasContainer = () => {
-  console.log('CanvasContainer');
+  //console.log('CanvasContainer');
   const dispatch = useDispatch();
   const { canvasMode } = useSelector(state => state.pictures);
   const [myCanvas, setMyCanvas] = useState(null);
@@ -44,9 +44,9 @@ const CanvasContainer = () => {
           CLEAR!
         </Button>
       </TopButtons>
-      <Contents>
+      <Content>
         <Canvas setMyCanvas={setMyCanvas} />
-      </Contents>
+      </Content>
     </>
   );
 };

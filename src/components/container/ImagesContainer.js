@@ -11,9 +11,9 @@ import {
 } from '../../redux/pictures';
 import styled from 'styled-components';
 
-import TopButtons from '../parts/tabPanel/TopButtons';
-import TopFilter from '../parts/tabPanel/TopFilter';
-import Contents from '../parts/tabPanel/Contents';
+import TopButtons from '../layout/tabPanel/TopButtons';
+import TopFilter from '../layout/tabPanel/TopFilter';
+import Content from '../layout/tabPanel/Content';
 import FileUploader from '../common/FileUploader';
 import Images from '../parts/Images';
 import Button from '../common/Button';
@@ -131,13 +131,13 @@ const ImagesContainer = () => {
       <TopFilter>
         <Select data={typeList} onChange={onChange} />
       </TopFilter>
-      <Contents>
+      <Content>
         <Images
           selectedType={selectedType}
           selectedList={selectedList}
           onToggle={onToggle}
         />
-      </Contents>
+      </Content>
     </>
   );
 };
