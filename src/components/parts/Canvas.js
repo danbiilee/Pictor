@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeProperties } from '../../redux/pictures';
 import styled from 'styled-components';
 
 import { debounce } from '../../utils/commonUtils';
@@ -10,13 +11,14 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 const CanvasBlock = styled.canvas`
-  background-color: #fff;
+  background-color: #eee;
 `;
 
 const Canvas = ({ setMyCanvas }) => {
   const { pictures, drawnPicture, canvasMode, properties } = useSelector(
     state => state.pictures,
   );
+
   const [canvasSize, setCanvasSize] = useState({
     width: 0,
     height: 0,
@@ -25,7 +27,7 @@ const Canvas = ({ setMyCanvas }) => {
   const canvasRef = useRef();
   const my = useRef(); // 캔버스 객체
   const ctx = useRef();
-  //console.log('Canvas', drawnPicture, canvasMode, properties);
+  console.log('Canvas', drawnPicture, properties);
 
   // 캔버스 사이즈 변경
   const handleResize = () =>
@@ -33,29 +35,6 @@ const Canvas = ({ setMyCanvas }) => {
       width: wrapperRef.current.offsetWidth,
       height: wrapperRef.current.offsetHeight - 1,
     });
-
-  // 캔버스 (재)설정 및 생성
-  const resetMyCanvas = drawnPicture => {
-    if (drawnPicture) {
-      // myCanvas 생성
-      const cropImgSrc = pictures.find(pic => pic.id === drawnPicture).src;
-      my.current = new MyCanvas(
-        wrapperRef.current,
-        canvasRef.current,
-        ctx.current,
-        cropImgSrc,
-      );
-      setMyCanvas(my.current);
-
-      // 이미지 초기화
-      my.current.initCropImage();
-
-      const that = my.current;
-      my.current.drawnImg.onload = function () {
-        that.drawImage(1.0);
-      };
-    }
-  };
 
   // 컴포넌트 마운트/언마운트 시 처리
   useEffect(() => {
@@ -76,63 +55,97 @@ const Canvas = ({ setMyCanvas }) => {
   // 리사이즈된 부모영역에 맞게 캔버스 사이즈 재조정
   useEffect(() => {
     const { width, height } = canvasSize;
+    console.log('canvasSize changed', width, height);
+
+    // 그려뒀던 이미지 있는 경우, 다시 그림
+    if (drawnPicture && my.current) {
+      my.current.resizeCanvas(width, height, canvasMode, properties);
+      return;
+    }
+
+    // 아닌 경우 바로 캔버스 리사이즈
     if (width && height) {
       canvasRef.current.width = width;
       canvasRef.current.height = height;
     }
+    // properties는 deps에 넣지 않음. makePattern 중복해서 발생됨
+  }, [canvasSize, drawnPicture, canvasMode]);
 
-    // 캔버스 리사이즈된 경우 캔버스랑 context 설정들 전부 리셋됨
-    if (drawnPicture) {
-      resetMyCanvas(drawnPicture);
-    }
-  }, [canvasSize]);
+  // const handleCanvasMode = () => {
+  //   switch (canvasMode) {
+  //     case 'crop':
+  //       console.log('crop!!!!');
+  //       // 이미지 다시 그리기
+  //       my.current.drawnImg.onload = function () {
+  //         my.current.drawImage(1.0);
+  //       };
+  //       my.current.canvas.addEventListener('mousedown', function (e) {
+  //         my.current.handleMouseDown(e);
+  //       });
+  //       break;
+  //     case 'pattern':
+  //       console.log('pattern!!!!');
+  //       my.current.makePattern(properties);
+  //       break;
+  //     case 'clear':
+  //       console.log('clear!!!!');
+  //       // clear canvas
+  //       my.current.clear();
+  //       break;
+  //   }
+  // };
 
-  // 선택한 이미지 바뀐 경우 캔버스 재생성
+  // 선택이미지 변경 시 캔버스 재생성
+  // 크롭 모드: 마우스 이벤트, 패턴 모드: 패턴만들기
   useEffect(() => {
     if (drawnPicture) {
-      resetMyCanvas(drawnPicture);
-    }
-  }, [drawnPicture, setMyCanvas, pictures]);
-
-  useEffect(() => {
-    if (canvasMode === 'crop') {
-      console.log('crop!!!!');
-
-      const that = my.current;
-      my.current.drawImage(0.7);
-
-      // 그리기 이벤트 감지
-      my.current.canvas.addEventListener('mousedown', function (e) {
-        that.handleMouseDown(e);
-      });
-    }
-
-    if (canvasMode === 'pattern') {
-      console.log('pattern!!!!');
-      my.current.makePattern(properties);
-    }
-
-    if (canvasMode === 'clear') {
-      console.log('clear!!!!');
-      // clear canvas
-      ctx.current.clearRect(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height,
+      console.log('drawnPicture!!!');
+      // myCanvas 생성
+      const cropImgSrc = pictures.find(pic => pic.id === drawnPicture).src;
+      my.current = new MyCanvas(
+        wrapperRef.current,
+        canvasRef.current,
+        ctx.current,
+        cropImgSrc,
       );
-    }
+      setMyCanvas(my.current);
+      my.current.initCropImage(); // 이미지 초기화
 
-    return () => {
-      //console.log('unmout');
-      if (my.current) {
-        my.current.canvas.removeEventListener(
-          'mousedown',
-          my.current.handleMouseDown,
-        );
+      switch (canvasMode) {
+        case 'crop':
+          console.log('crop!!!!');
+          // 이미지 다시 그리기
+          my.current.drawnImg.onload = function () {
+            my.current.drawImage(1.0);
+          };
+          my.current.canvas.addEventListener('mousedown', function (e) {
+            my.current.handleMouseDown(e);
+          });
+          break;
+        case 'pattern':
+          console.log('pattern!!!!');
+          my.current.makePattern(properties);
+          break;
+        case 'clear':
+          console.log('clear!!!!');
+          // clear canvas
+          my.current.clear();
+          break;
       }
-    };
-  }, [canvasMode, properties]);
+      // if (my.current) {
+      //   my.current.canvas.removeEventListener(
+      //     'mousedown',
+      //     my.current.handleMouseDown,
+      //   );
+      // }
+    }
+  }, [drawnPicture, pictures, canvasMode, setMyCanvas, properties]);
+
+  // useEffect(() => {
+  //   if (canvasMode === 'pattern') {
+  //     my.current.makePattern(properties);
+  //   }
+  // }, [canvasMode, properties]);
 
   return (
     <Wrapper ref={wrapperRef}>

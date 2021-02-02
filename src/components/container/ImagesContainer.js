@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getPictures,
@@ -31,7 +31,7 @@ const addTypeList = (pictures, typeList) => {
   }
 
   for (let pic of pictures) {
-    // canvasMode: origin, crop, pattern
+    // type: origin, crop, pattern
     let optionName = '';
     if (pic.type === 'crop') optionName = '크롭';
     else if (pic.type === 'pattern') optionName = '패턴';
@@ -45,6 +45,7 @@ const addTypeList = (pictures, typeList) => {
 };
 
 const ImagesContainer = () => {
+  //console.log('ImagesContainer');
   const dispatch = useDispatch();
   const { pictures, drawnPicture } = useSelector(state => state.pictures);
 
@@ -57,8 +58,6 @@ const ImagesContainer = () => {
   ];
   // pictures가 바뀌었을 때만 실행
   typeList = useMemo(() => addTypeList(pictures, typeList), [pictures]);
-
-  //console.log('ImagesContainer', pictures, typeList);
 
   // 첫 마운트 후 indexedDB 값 리덕스 스토어에 셋팅
   useEffect(() => {
@@ -73,17 +72,18 @@ const ImagesContainer = () => {
 
   // 선택 이미지 리스트(삭제용) 관리
   const [selectedList, setSelectedList] = useState([]);
-  const onToggle = id => {
-    if (selectedList.includes(id)) {
-      setSelectedList(selectedList.filter(item => item !== id));
-      dispatch(deleteSelectedPictures(id));
-    } else {
-      setSelectedList(selectedList.concat(id));
-      dispatch(addSelectedPictures(id));
-    }
-    dispatch(changeDrawnPicture(id));
-    dispatch(changeCanvasMode(null));
-  };
+  const onToggle = useCallback(
+    id => {
+      if (selectedList.includes(id)) {
+        setSelectedList(selectedList.filter(item => item !== id));
+        dispatch(deleteSelectedPictures(id));
+      } else {
+        setSelectedList(selectedList.concat(id));
+        dispatch(addSelectedPictures(id));
+      }
+    },
+    [selectedList, dispatch],
+  );
 
   const onDelete = () => {
     dispatch(deletePicture(selectedList));
@@ -98,10 +98,11 @@ const ImagesContainer = () => {
   };
 
   const onCrop = () => {
-    if (!drawnPicture) {
-      alert('⚠ 이미지를 선택해주세요 ⚠');
+    if (selectedList.length > 1) {
+      alert('⚠ 하나의 이미지만 크롭할 수 있습니다 ⚠');
       return;
     }
+    dispatch(changeDrawnPicture(selectedList[0]));
     dispatch(changeCanvasMode('crop'));
   };
 

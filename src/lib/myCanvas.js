@@ -1,3 +1,5 @@
+import { initialData } from '../redux/pictures';
+
 export function MyCanvas(wrapper, canvas, ctx, drawnImgSrc) {
   this.wrapper = wrapper;
   this.canvas = canvas;
@@ -10,9 +12,39 @@ export function MyCanvas(wrapper, canvas, ctx, drawnImgSrc) {
   this.isCropped = false; // crop() 함수 실행여부
 }
 
+// 캔버스 리사이즈 시 원본 유지
+MyCanvas.prototype.resizeCanvas = function (...args) {
+  const [width, height, canvasMode, properties] = args;
+  const c = document.createElement('canvas');
+  const cx = c.getContext('2d');
+
+  // 이전 캔버스 저장
+  c.width = this.canvas.width;
+  c.height = this.canvas.height;
+  cx.drawImage(this.canvas, 0, 0);
+
+  this.canvas.width = width;
+  this.canvas.height = height;
+
+  switch (canvasMode) {
+    case 'crop':
+      this.ctx.drawImage(c, 0, 0);
+      break;
+    case 'pattern':
+      this.makePattern(properties);
+      break;
+  }
+};
+
+// 캔버스 클리어하기
+MyCanvas.prototype.clear = function () {
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+};
+
 // 크롭할 이미지 로드하기
 MyCanvas.prototype.initCropImage = function () {
-  //const my = this;
+  //console.log('initCropImage', this.drawnImgSrc.substr(20, 30));
+  this.clear();
   this.drawnImg = new Image();
   this.drawnImg.src = this.drawnImgSrc;
 };
@@ -32,6 +64,7 @@ const getSizeToKeepImageScale = (img, canvas) => {
 
 // 이미지 그리기 (투명도 설정)
 MyCanvas.prototype.drawImage = function (alpha) {
+  //console.log('drawImage', this.drawnImg.src.substr(20, 30));
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   this.ctx.globalAlpha = alpha; // 투명도 설정
 
@@ -65,6 +98,7 @@ MyCanvas.prototype.handleMouseDown = function (e) {
   } // 세로 스크롤값 적용
 
   this.points.push({ x, y });
+  console.log(this.points);
 
   // 클리핑 패스 라인 그리기
   this.drawOutline();
@@ -158,7 +192,7 @@ MyCanvas.prototype.crop = function () {
   this.points.length = 0;
 };
 
-MyCanvas.prototype.makePattern = function (prop = null) {
+MyCanvas.prototype.makePattern = function (prop) {
   // 패턴 설정값
   let {
     color,
@@ -170,13 +204,13 @@ MyCanvas.prototype.makePattern = function (prop = null) {
     type,
   } = prop;
   canvasWidth = parseInt(canvasWidth ? canvasWidth : this.canvas.width, 10);
-  canvasHeight = parseInt(canvasHeight ? canvasWidth : this.canvas.height, 10);
+  canvasHeight = parseInt(canvasHeight ? canvasHeight : this.canvas.height, 10);
   imgWidth = parseInt(imgWidth ? imgWidth : this.drawnImg.width, 10);
   imgHeight = parseInt(imgHeight ? imgHeight : this.drawnImg.height, 10);
   gap = parseInt(gap, 10);
 
-  this.ctx.save();
-  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  // 캔버스 초기화
+  this.clear();
 
   // 배경색 설정
   this.ctx.beginPath();
@@ -187,8 +221,21 @@ MyCanvas.prototype.makePattern = function (prop = null) {
   // 이미지 뿌리기
   const loopX = Math.ceil(canvasWidth / (gap + imgWidth));
   const loopY = Math.ceil(canvasHeight / (gap + imgHeight));
+  console.log(
+    'makePattern',
+    canvasWidth,
+    canvasHeight,
+    imgWidth,
+    imgHeight,
+    loopX,
+    loopY,
+  );
 
-  console.log('makePattern', canvasWidth, gap, imgWidth, loopX, loopY);
+  // props 사이즈만큼 context 크기 클립해두고 그 안에서 패턴 뿌림
+  // 그 뒤 다시 이전 context로 restore
+  this.ctx.save();
+  this.ctx.rect(0, 0, canvasWidth, canvasHeight);
+  this.ctx.clip();
 
   let y = 0;
   for (let i = 0; i < loopY; i++) {
@@ -200,21 +247,10 @@ MyCanvas.prototype.makePattern = function (prop = null) {
       x += imgWidth + gap;
     }
     y += imgHeight + gap;
-    console.log(x, y);
   }
+
   this.ctx.restore();
-
-  // 캔버스 생성
-  const c = document.createElement('canvas');
-  const cx = c.getContext('2d');
-  // 사이즈 설정(prop.bgWidth, prop.bgHeight)
-  c.width = canvasWidth;
-  c.height = canvasHeight;
-
-  // 새로운 캔버스에 패턴 그리기
-  cx.drawImage(this.canvas, 0, 0, canvasWidth, canvasHeight);
-  this.drawnImgSrc = c.toDataURL();
-  //this.drawImage(1.0);
+  this.drawnImgSrc = this.canvas.toDataURL();
 
   // const my = this;
   // const img = new Image();

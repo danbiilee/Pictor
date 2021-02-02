@@ -58,11 +58,7 @@ export function* pictureSaga() {
   yield takeEvery(DELETE_PICTURE, deletePictureSaga);
 }
 
-const initialState = {
-  pictures: [],
-  selectedPictures: [], // 삭제
-  drawnPicture: null,
-  canvasMode: null,
+export const initialData = {
   properties: {
     color: '#ffffff',
     canvasWidth: 0,
@@ -72,6 +68,14 @@ const initialState = {
     gap: 50,
     type: 'vanilla',
   },
+};
+
+const initialState = {
+  pictures: [],
+  selectedPictures: [], // 삭제
+  drawnPicture: null,
+  canvasMode: null,
+  properties: initialData.properties,
 };
 
 export default function pictures(state = initialState, action) {

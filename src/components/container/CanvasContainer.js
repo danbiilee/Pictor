@@ -28,9 +28,9 @@ const CanvasContainer = () => {
       type: canvasMode,
       src: myCanvas.drawnImgSrc,
     };
-    if (myCanvas.drawnImgTitle) {
-      payload.title = myCanvas.drawnImgTitle;
-    }
+    // if (myCanvas.drawnImgTitle) {
+    //   payload.title = myCanvas.drawnImgTitle;
+    // }
     dispatch(addPicture(payload));
   };
 

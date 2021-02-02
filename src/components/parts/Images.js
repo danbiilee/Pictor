@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import Button from '../common/Button';
-import SVG from '../common/SVG';
-
 const Ul = styled.ul`
   overflow-y: auto;
   flex: 1 0 500px;
@@ -47,8 +44,9 @@ const filterListByType = (pictures, type) => {
   return result;
 };
 
-const Images = ({ selectedType, selectedList, onToggle }) => {
-  const dispatch = useDispatch();
+const Images = React.memo(({ selectedType, selectedList, onToggle }) => {
+  //console.log('Images', selectedType, selectedList);
+
   const { pictures } = useSelector(state => state.pictures);
 
   // 렌더링될 이미지 필터링
@@ -58,7 +56,8 @@ const Images = ({ selectedType, selectedList, onToggle }) => {
   ]);
 
   // 선택여부 속성 추가
-  if (filteredImages && filteredImages.length) {
+  const bool = filteredImages && filteredImages.length;
+  if (bool) {
     filteredImages = filteredImages.map(img => {
       const check = selectedList.includes(img.id);
       return check
@@ -66,25 +65,29 @@ const Images = ({ selectedType, selectedList, onToggle }) => {
         : { ...img, isSelected: false };
     });
   }
-
   //console.log('ImageList', selectedType, pictures, filteredImages);
 
   return (
     <Ul>
-      {filteredImages && filteredImages.length
+      {bool
         ? filteredImages.map(img => (
-            <Li
-              key={img.id}
-              isSelected={img.isSelected}
-              onClick={() => onToggle(img.id)}
-            >
-              <SelectBlock isSelected={img.isSelected} />
-              <Img alt="uploaded image" src={img.src} />
-            </Li>
+            <ImageItem key={img.id} img={img} onToggle={onToggle} />
           ))
         : null}
     </Ul>
   );
-};
+});
+
+const ImageItem = React.memo(({ img, onToggle }) => {
+  const { id, isSelected, src } = img;
+  //console.log('ImageItem');
+
+  return (
+    <Li isSelected={isSelected} onClick={() => onToggle(id)}>
+      <SelectBlock isSelected={isSelected} />
+      <Img alt="uploaded image" src={src} />
+    </Li>
+  );
+});
 
 export default Images;
