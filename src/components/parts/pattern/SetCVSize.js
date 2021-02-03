@@ -40,7 +40,7 @@ const SetCVSize = ({ ...props }) => {
   //console.log('SetCVSize', canvasWidth, canvasHeight, userWidth, userHeight);
 
   useEffect(() => {
-    // 둘 다 변경되었을 때만 최종 반영
+    // 둘 다 변경되었을 때만 최종 반영?
     setProperties(properties => ({
       ...properties,
       canvasWidth: userWidth,

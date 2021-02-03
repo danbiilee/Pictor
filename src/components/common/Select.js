@@ -14,7 +14,7 @@ const Option = styled.option`
 
 const Select = ({ data, onChange }) => {
   return (
-    <SelectBlock onChange={onChange}>
+    <SelectBlock name="type" onChange={onChange}>
       {data &&
         data.map(d => (
           <Option key={d.type} value={d.type}>

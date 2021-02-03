@@ -27,14 +27,15 @@ const Canvas = ({ setMyCanvas }) => {
   const canvasRef = useRef();
   const my = useRef(); // 캔버스 객체
   const ctx = useRef();
-  console.log('Canvas', drawnPicture, properties);
+  //console.log('Canvas', drawnPicture, properties);
 
   // 캔버스 사이즈 변경
-  const handleResize = () =>
+  const handleResize = () => {
     setCanvasSize({
       width: wrapperRef.current.offsetWidth,
       height: wrapperRef.current.offsetHeight - 1,
     });
+  };
 
   // 컴포넌트 마운트/언마운트 시 처리
   useEffect(() => {
@@ -55,7 +56,6 @@ const Canvas = ({ setMyCanvas }) => {
   // 리사이즈된 부모영역에 맞게 캔버스 사이즈 재조정
   useEffect(() => {
     const { width, height } = canvasSize;
-    console.log('canvasSize changed', width, height);
 
     // 그려뒀던 이미지 있는 경우, 다시 그림
     if (drawnPicture && my.current) {
