@@ -25,9 +25,7 @@ const ButtonInner = styled.div`
 
 const SettingsContainer = () => {
   const dispatch = useDispatch();
-  const { properties: prop, canvasMode, drawnPicture } = useSelector(
-    state => state.pictures,
-  );
+  const { properties: prop, canvasMode, drawnPicture } = useSelector(state => state.pictures);
 
   // 속성 설정
   const defaultProps = initialData.properties;
@@ -97,7 +95,8 @@ const SettingsContainer = () => {
           selected={selected}
           handleSelected={handleSelected}
           setProperties={setProperties}
-          properties={properties}
+          canvasWidth={properties.canvasWidth}
+          canvasHeight={properties.canvasHeight}
         />
         <SetImgSize
           selected={selected}
