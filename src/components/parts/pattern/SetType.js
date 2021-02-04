@@ -1,14 +1,11 @@
 import React from 'react';
-
-import SVG from '../../common/SVG';
 import Select from '../../common/Select';
-
 import ToggleWrapper from '../../layout/pattern/ToggleWrapper';
 import ToggleTitle from '../../layout/pattern/ToggleTitle';
 import ToggleContent from '../../layout/pattern/ToggleContent';
 
 const SetType = ({ ...props }) => {
-  const { selected, handleSelected, type, onChange } = props;
+  const { selected, handleSelected, onChange } = props;
   const typeList = [
     {
       type: 'vanilla',

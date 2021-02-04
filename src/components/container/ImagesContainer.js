@@ -99,7 +99,7 @@ const ImagesContainer = () => {
 
   const onCrop = () => {
     if (selectedList.length > 1) {
-      alert('⚠ 하나의 이미지만 크롭할 수 있습니다 ⚠');
+      alert('⚠ 한번에 하나의 이미지만 크롭할 수 있습니다 ⚠');
       return;
     }
     dispatch(changeDrawnPicture(selectedList[0]));
@@ -111,7 +111,7 @@ const ImagesContainer = () => {
       <TopButtons>
         <ButtonInner>
           <FileUploader />
-          <Button padding="5px" margin="0 5px 0 0" onClick={onDelete}>
+          <Button padding="5px" margin="0 5px 0 0" onClick={onDelete} aria-label="이미지 삭제">
             <SVG
               width="15"
               height="15"
@@ -120,7 +120,7 @@ const ImagesContainer = () => {
           </Button>
         </ButtonInner>
         <ButtonInner>
-          <Button padding="5px" margin="0 5px 0 0" onClick={onCrop}>
+          <Button padding="5px" margin="0 5px 0 0" onClick={onCrop} aria-label="이미지 자르기">
             <SVG
               width="15"
               height="15"
@@ -133,11 +133,7 @@ const ImagesContainer = () => {
         <Select data={typeList} onChange={onChange} />
       </TopFilter>
       <Content>
-        <Images
-          selectedType={selectedType}
-          selectedList={selectedList}
-          onToggle={onToggle}
-        />
+        <Images selectedType={selectedType} selectedList={selectedList} onToggle={onToggle} />
       </Content>
     </>
   );

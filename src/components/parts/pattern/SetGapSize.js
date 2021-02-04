@@ -1,12 +1,15 @@
 import React from 'react';
-import SVG from '../../common/SVG';
+import { useSelector } from 'react-redux';
+
 import Range from '../../common/Range';
 import ToggleWrapper from '../../layout/pattern/ToggleWrapper';
 import ToggleTitle from '../../layout/pattern/ToggleTitle';
 import ToggleContent from '../../layout/pattern/ToggleContent';
 
 const SetGapSize = ({ ...props }) => {
-  const { selected, handleSelected, gap, onChange } = props;
+  const { selected, handleSelected, onChange } = props;
+  const { gap } = useSelector(state => state.pictures.properties);
+
   return (
     <ToggleWrapper>
       <ToggleTitle selected={selected} type="gap" handleSelected={handleSelected}>

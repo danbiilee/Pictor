@@ -20,6 +20,8 @@ MyCanvas.prototype.resizeCanvas = function (...args) {
   const c = document.createElement('canvas');
   const cx = c.getContext('2d');
 
+  //console.log('resizeCanvas', width, properties.canvasWidth);
+
   // 이전 캔버스 저장
   c.width = this.canvas.width;
   c.height = this.canvas.height;
@@ -33,6 +35,9 @@ MyCanvas.prototype.resizeCanvas = function (...args) {
       this.ctx.drawImage(c, 0, 0);
       break;
     case 'pattern':
+      // 변경된 사이즈 적용 -> 사용자정의값 무시됨
+      properties.canvasWidth = width;
+      properties.canvasHeight = height;
       this.makePattern(properties);
       break;
   }
@@ -81,7 +86,6 @@ MyCanvas.prototype.handleMouseDown = function (e) {
   } // 세로 스크롤값 적용
 
   this.points.push({ x, y });
-  console.log(this.points);
 
   // 클리핑 패스 라인 그리기
   this.drawOutline();

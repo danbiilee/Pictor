@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { changeProperties } from '../../redux/pictures';
 import styled from 'styled-components';
 
-import { debounce } from '../../utils/commonUtils';
+import { debounce } from 'lodash';
 import { MyCanvas } from '../../lib/myCanvas';
 
 const Wrapper = styled.div`
@@ -15,8 +15,8 @@ const CanvasBlock = styled.canvas`
 `;
 
 const Canvas = ({ setMyCanvas }) => {
+  const dispatch = useDispatch();
   const { pictures, drawnPicture, canvasMode, properties } = useSelector(state => state.pictures);
-
   const [canvasSize, setCanvasSize] = useState({
     width: 0,
     height: 0,
@@ -29,6 +29,7 @@ const Canvas = ({ setMyCanvas }) => {
 
   // 캔버스 사이즈 변경
   const handleResize = () => {
+    console.log('handleResize', wrapperRef.current.offsetWidth);
     setCanvasSize({
       width: wrapperRef.current.offsetWidth,
       height: wrapperRef.current.offsetHeight - 1,
@@ -51,23 +52,29 @@ const Canvas = ({ setMyCanvas }) => {
     };
   }, []);
 
-  // 리사이즈된 부모영역에 맞게 캔버스 사이즈 재조정
+  // 캔버스 사이즈 재조정
   useEffect(() => {
     const { width, height } = canvasSize;
 
-    // 그려뒀던 이미지 있는 경우, 다시 그림
-    if (drawnPicture && my.current) {
-      my.current.resizeCanvas(width, height, canvasMode, properties);
-      return;
+    // 패턴모드일 경우 properties 변경, 아래에서 canvas 재생성됨
+    if (canvasMode === 'pattern') {
+      dispatch(
+        changeProperties({
+          ...properties,
+          canvasWidth: width,
+          canvasHeight: height,
+        }),
+      );
     }
 
-    // 아닌 경우 바로 캔버스 리사이즈
-    if (width && height) {
-      canvasRef.current.width = width;
-      canvasRef.current.height = height;
+    if (my.current) {
+      my.current.resizeCanvas(width, height, canvasMode, properties);
     }
     // properties는 deps에 넣지 않음. makePattern 중복해서 발생됨
-  }, [canvasSize, drawnPicture, canvasMode]);
+  }, [canvasSize]);
+
+  // eventListener가 동일 ref 참조할 수 있도록 함수 저장
+  const mousedownRef = useRef();
 
   // 선택이미지 변경 시 캔버스 재생성
   useEffect(() => {
@@ -83,9 +90,10 @@ const Canvas = ({ setMyCanvas }) => {
         my.current.drawnImg.onload = function () {
           my.current.drawImage(1.0);
         };
-        my.current.canvas.addEventListener('mousedown', function (e) {
+        mousedownRef.current = function (e) {
           my.current.handleMouseDown(e);
-        });
+        }; // 함수 저장
+        my.current.canvas.addEventListener('mousedown', mousedownRef.current);
         break;
       case 'pattern':
         console.log('pattern!!!!');
@@ -97,12 +105,12 @@ const Canvas = ({ setMyCanvas }) => {
         my.current.clear();
         break;
     }
-    // if (my.current) {
-    //   my.current.canvas.removeEventListener(
-    //     'mousedown',
-    //     my.current.handleMouseDown,
-    //   );
-    // }
+
+    return () => {
+      if (my.current) {
+        my.current.canvas.removeEventListener('mousedown', mousedownRef.current);
+      }
+    };
   }, [drawnPicture, pictures, canvasMode, setMyCanvas, properties]);
 
   return (

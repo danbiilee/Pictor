@@ -19,8 +19,10 @@ const Block = styled.div`
 `;
 
 const SetImgSize = ({ ...props }) => {
-  const { selected, handleSelected, width, height, onChange } = props;
-  const { pictures, drawnPicture } = useSelector(state => state.pictures);
+  const { selected, handleSelected, onChange } = props;
+  const { pictures, drawnPicture, properties } = useSelector(state => state.pictures);
+  const { imgWidth: width, imgHeight: height } = properties;
+
   const img = new Image();
   if (drawnPicture) {
     img.src = pictures.find(p => p.id === drawnPicture).src;

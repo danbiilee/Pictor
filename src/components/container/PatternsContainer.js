@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeProperties, initialData } from '../../redux/pictures';
 
@@ -17,7 +16,7 @@ import SetType from '../parts/pattern/SetType';
 
 const SettingsContainer = () => {
   const dispatch = useDispatch();
-  const { properties: prop, canvasMode, drawnPicture } = useSelector(state => state.pictures);
+  const { properties: prop } = useSelector(state => state.pictures);
 
   // 속성 설정
   const defaultProps = initialData.properties;
@@ -54,7 +53,7 @@ const SettingsContainer = () => {
   return (
     <>
       <TopButtons>
-        <Button padding="5px" margin="0 5px 0 0" onClick={onReset}>
+        <Button padding="5px" margin="0 5px 0 0" onClick={onReset} aria-label="설정 초기화">
           <SVG
             width="15"
             height="15"
@@ -67,36 +66,17 @@ const SettingsContainer = () => {
           selected={selected}
           handleSelected={handleSelected}
           setProperties={setProperties}
-          color={properties.color}
           onChange={onChange}
         />
         <SetCVSize
           selected={selected}
           handleSelected={handleSelected}
           setProperties={setProperties}
-          canvasWidth={properties.canvasWidth}
-          canvasHeight={properties.canvasHeight}
         />
         <SetImage selected={selected} handleSelected={handleSelected} />
-        <SetImgSize
-          selected={selected}
-          handleSelected={handleSelected}
-          onChange={onChange}
-          width={properties.imgWidth}
-          height={properties.imgHeight}
-        />
-        <SetGapSize
-          selected={selected}
-          handleSelected={handleSelected}
-          onChange={onChange}
-          gap={properties.gap}
-        />
-        <SetType
-          selected={selected}
-          handleSelected={handleSelected}
-          onChange={onChange}
-          type={properties.type}
-        />
+        <SetImgSize selected={selected} handleSelected={handleSelected} onChange={onChange} />
+        <SetGapSize selected={selected} handleSelected={handleSelected} onChange={onChange} />
+        <SetType selected={selected} handleSelected={handleSelected} onChange={onChange} />
       </Content>
     </>
   );

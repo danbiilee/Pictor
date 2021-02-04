@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Color from '../../common/Color';
@@ -13,7 +14,9 @@ const ColorCode = styled.div`
 `;
 
 const SetColor = ({ ...props }) => {
-  const { selected, handleSelected, color, onChange, setProperties } = props;
+  const { selected, handleSelected, onChange, setProperties } = props;
+  const { color } = useSelector(state => state.pictures.properties);
+
   return (
     <ToggleWrapper>
       <ToggleTitle selected={selected} type="color" handleSelected={handleSelected}>

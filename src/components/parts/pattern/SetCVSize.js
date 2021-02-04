@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { isEqual } from 'lodash';
+import { initialData } from '../../../redux/pictures';
 
 import Range from '../../common/Range';
 import ToggleWrapper from '../../layout/pattern/ToggleWrapper';
@@ -18,12 +21,17 @@ const Block = styled.div`
 `;
 
 const SetCVSize = ({ ...props }) => {
-  const { selected, handleSelected, canvasWidth, canvasHeight, setProperties } = props;
+  const { selected, handleSelected, setProperties } = props;
 
-  const canvasRef = useRef(document.querySelector('canvas'));
+  const defaultProps = initialData.properties;
+  const { properties } = useSelector(state => state.pictures);
+  const { canvasWidth, canvasHeight } = properties;
+
+  const nodes = document.querySelectorAll('canvas');
+  const canvasRef = useRef(nodes.length > 1 ? nodes[1] : nodes[0]);
   const [userSize, setUserSize] = useState({
-    width: canvasWidth ? canvasWidth : canvasRef.current.offsetWidth,
-    height: canvasHeight ? canvasHeight : canvasRef.current.offsetHeight,
+    width: canvasWidth ? canvasWidth : canvasRef.current.width,
+    height: canvasHeight ? canvasHeight : canvasRef.current.height,
   });
 
   const onChange = e => {
@@ -34,12 +42,19 @@ const SetCVSize = ({ ...props }) => {
   //console.log('SetCVSize', canvasWidth, canvasHeight, userSize);
 
   useEffect(() => {
+    // 설정이 리셋됐을 때
+    if (isEqual(properties, defaultProps)) {
+      setUserSize({ width: canvasRef.current.width, height: canvasRef.current.height });
+    }
+  }, [canvasWidth, canvasHeight]);
+
+  useEffect(() => {
     setProperties(properties => ({
       ...properties,
       canvasWidth: userSize.width,
       canvasHeight: userSize.height,
     }));
-  }, [canvasWidth, canvasHeight, userSize]);
+  }, [userSize]);
 
   return (
     <ToggleWrapper>
