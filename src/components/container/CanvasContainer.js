@@ -20,6 +20,10 @@ const CanvasContainer = () => {
   };
 
   const onSave = () => {
+    if (!canvasMode) {
+      alert('⚠ 편집 중인 이미지가 없습니다 ⚠');
+      return;
+    }
     const payload = {
       type: canvasMode,
       src: myCanvas.drawnImgSrc,

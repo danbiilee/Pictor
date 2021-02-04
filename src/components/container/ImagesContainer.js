@@ -88,6 +88,11 @@ const ImagesContainer = () => {
   const onReset = () => setSelectedList([]);
 
   const onDelete = () => {
+    if (!selectedList.length) {
+      alert('⚠ 이미지를 선택해주세요 ⚠');
+      return;
+    }
+
     dispatch(deletePicture(selectedList));
     dispatch(clearSelectedPictures());
 
@@ -116,6 +121,10 @@ const ImagesContainer = () => {
   };
 
   const onCrop = () => {
+    if (!selectedList.length) {
+      alert('⚠ 이미지를 선택해주세요 ⚠');
+      return;
+    }
     if (selectedList.length > 1) {
       alert('⚠ 한번에 하나의 이미지만 크롭할 수 있습니다 ⚠');
       return;
