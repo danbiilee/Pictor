@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 import { changeProperties, initialData } from '../../redux/pictures';
 
 import SVG from '../common/SVG';
@@ -13,6 +14,12 @@ import SetCVSize from '../parts/pattern/SetCVSize';
 import SetImgSize from '../parts/pattern/SetImgSize';
 import SetGapSize from '../parts/pattern/SetGapSize';
 import SetType from '../parts/pattern/SetType';
+import FileUploader from '../common/FileUploader';
+
+const ButtonInner = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const SettingsContainer = () => {
   const dispatch = useDispatch();
@@ -52,14 +59,19 @@ const SettingsContainer = () => {
 
   return (
     <>
-      <TopButtons flex="flex-end">
-        <Button padding="5px" margin="0 5px 0 0" onClick={onReset} aria-label="설정 초기화">
-          <SVG
-            width="15"
-            height="15"
-            path="M18.885 3.515c-4.617-4.618-12.056-4.676-16.756-.195l-2.129-2.258v7.938h7.484l-2.066-2.191c2.82-2.706 7.297-2.676 10.073.1 4.341 4.341 1.737 12.291-5.491 12.291v4.8c3.708 0 6.614-1.244 8.885-3.515 4.686-4.686 4.686-12.284 0-16.97z"
-          />
-        </Button>
+      <TopButtons>
+        <ButtonInner>
+          <FileUploader />
+        </ButtonInner>
+        <ButtonInner>
+          <Button padding="5px" margin="0 5px 0 0" onClick={onReset} aria-label="설정 초기화">
+            <SVG
+              width="15"
+              height="15"
+              path="M18.885 3.515c-4.617-4.618-12.056-4.676-16.756-.195l-2.129-2.258v7.938h7.484l-2.066-2.191c2.82-2.706 7.297-2.676 10.073.1 4.341 4.341 1.737 12.291-5.491 12.291v4.8c3.708 0 6.614-1.244 8.885-3.515 4.686-4.686 4.686-12.284 0-16.97z"
+            />
+          </Button>
+        </ButtonInner>
       </TopButtons>
       <Content>
         <SetColor
