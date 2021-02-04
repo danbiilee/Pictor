@@ -20,6 +20,24 @@ const GlobalStyle = createGlobalStyle`
   &::-webkit-scrollbar-track {
     background-color: var(--dark-gray);
   }
+  &[aria-label] {
+    position: relative;
+  }
+  &[aria-label]::after{
+    content: attr(aria-label);
+    opacity: 0;
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    padding: 3px;
+    background-color: var(--dark-gray);
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  &[aria-label]:hover::after {
+    opacity: 1;
+    transition: 0.2s ease-in-out;
+  }
 }
 html, body, #root {
   width: 100vw;
