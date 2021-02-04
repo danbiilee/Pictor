@@ -5,7 +5,8 @@ import styled from 'styled-components';
 const Ul = styled.ul`
   overflow-y: auto;
   flex: 1 0 500px;
-  padding: 3px;
+  width: 100%;
+  padding: 10px;
 `;
 const Li = styled.li`
   position: relative;
@@ -26,7 +27,7 @@ const SelectBlock = styled.div`
   position: absolute;
   visibility: ${props => (props.isSelected ? 'visible' : 'hidden')};
   width: 100%;
-  height: 130px;
+  height: fit-content;
   background: rgba(0, 0, 0, 0.4);
 `;
 
@@ -60,9 +61,7 @@ const Images = React.memo(({ selectedType, selectedList, onToggle }) => {
   if (bool) {
     filteredImages = filteredImages.map(img => {
       const check = selectedList.includes(img.id);
-      return check
-        ? { ...img, isSelected: true }
-        : { ...img, isSelected: false };
+      return check ? { ...img, isSelected: true } : { ...img, isSelected: false };
     });
   }
   //console.log('ImageList', selectedType, pictures, filteredImages);
@@ -70,9 +69,7 @@ const Images = React.memo(({ selectedType, selectedList, onToggle }) => {
   return (
     <Ul>
       {bool
-        ? filteredImages.map(img => (
-            <ImageItem key={img.id} img={img} onToggle={onToggle} />
-          ))
+        ? filteredImages.map(img => <ImageItem key={img.id} img={img} onToggle={onToggle} />)
         : null}
     </Ul>
   );
