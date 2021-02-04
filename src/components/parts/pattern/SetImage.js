@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { changeDrawnPicture, changeCanvasMode } from '../../../redux/pictures';
+import { changeDrawnPicture } from '../../../redux/pictures';
 
-import SVG from '../../common/SVG';
 import Images from '../../parts/Images';
 import ToggleWrapper from '../../layout/pattern/ToggleWrapper';
 import ToggleTitle from '../../layout/pattern/ToggleTitle';
@@ -18,7 +17,6 @@ const SetImage = ({ selected, handleSelected }) => {
       if (!selectedCrop.includes(id)) {
         setSelectedCrop([id]);
         dispatch(changeDrawnPicture(id));
-        dispatch(changeCanvasMode('pattern'));
       }
     },
     [selectedCrop, dispatch],
@@ -26,19 +24,11 @@ const SetImage = ({ selected, handleSelected }) => {
 
   return (
     <ToggleWrapper>
-      <ToggleTitle
-        selected={selected}
-        type="img"
-        handleSelected={handleSelected}
-      >
-        <SVG width="10" height="10" path="M12 21l-12-18h24z" /> Select Image
+      <ToggleTitle selected={selected} type="img" handleSelected={handleSelected}>
+        Select Image
       </ToggleTitle>
-      <ToggleContent selected={selected === 'img'}>
-        <Images
-          selectedType="crop"
-          selectedList={selectedCrop}
-          onToggle={onToggle}
-        />
+      <ToggleContent selected={selected === 'img'} column>
+        <Images selectedType="crop" selectedList={selectedCrop} onToggle={onToggle} />
       </ToggleContent>
     </ToggleWrapper>
   );

@@ -10,7 +10,7 @@ const SetGapSize = ({ ...props }) => {
   return (
     <ToggleWrapper>
       <ToggleTitle selected={selected} type="gap" handleSelected={handleSelected}>
-        <SVG width="10" height="10" path="M12 21l-12-18h24z" /> Set Gap Size
+        Gap Size
       </ToggleTitle>
       <ToggleContent selected={selected === 'gap'}>
         <Range name="gap" value={gap} min="5" max="100" onChange={onChange} />

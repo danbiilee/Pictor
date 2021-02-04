@@ -178,6 +178,9 @@ input, textarea, select, option {
   outline: 0;
   font-family: 'Noto Sans KR', sans-serif;
 }
+input, select, option {
+  cursor: pointer;
+}
 `;
 
 export default GlobalStyle;

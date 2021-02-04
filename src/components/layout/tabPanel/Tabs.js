@@ -24,28 +24,22 @@ const Li = styled.li`
   cursor: pointer;
 `;
 
+const Tabs = React.memo(({ tabs, activeTab, handleTab }) => {
+  return (
+    <Ul>
+      {tabs.map((tab, index) => (
+        <TabItem key={index} tab={tab} id={index} activeTab={activeTab} handleTab={handleTab} />
+      ))}
+    </Ul>
+  );
+});
+
 const TabItem = React.memo(({ handleTab, ...props }) => {
   const { id, tab, activeTab } = props;
   return (
     <Li key={id} onClick={() => handleTab(id)} isActive={id === activeTab}>
       {tab}
     </Li>
-  );
-});
-
-const Tabs = React.memo(({ tabs, activeTab, handleTab }) => {
-  return (
-    <Ul>
-      {tabs.map((tab, index) => (
-        <TabItem
-          key={index}
-          tab={tab}
-          id={index}
-          activeTab={activeTab}
-          handleTab={handleTab}
-        />
-      ))}
-    </Ul>
   );
 });
 

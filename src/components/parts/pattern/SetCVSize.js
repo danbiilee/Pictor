@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
 
-import SVG from '../../common/SVG';
 import Range from '../../common/Range';
 import ToggleWrapper from '../../layout/pattern/ToggleWrapper';
 import ToggleTitle from '../../layout/pattern/ToggleTitle';
 import ToggleContent from '../../layout/pattern/ToggleContent';
+
+const Inner = styled.div`
+  display: flex;
+  &:first-of-type {
+    margin-bottom: 10px;
+  }
+`;
+
+const Block = styled.div`
+  flex-basis: 20%;
+`;
 
 const SetCVSize = ({ ...props }) => {
   const { selected, handleSelected, canvasWidth, canvasHeight, setProperties } = props;
@@ -33,27 +44,31 @@ const SetCVSize = ({ ...props }) => {
   return (
     <ToggleWrapper>
       <ToggleTitle selected={selected} type="canvasSize" handleSelected={handleSelected}>
-        <SVG width="10" height="10" path="M12 21l-12-18h24z" /> Background Size
+        Background Size
       </ToggleTitle>
-      <ToggleContent selected={selected === 'canvasSize'}>
-        W:{' '}
-        <Range
-          name="width"
-          value={userSize.width}
-          onChange={onChange}
-          min="100"
-          max="1920"
-          step="30"
-        />
-        H:{' '}
-        <Range
-          name="height"
-          value={userSize.height}
-          onChange={onChange}
-          min="100"
-          max="1080"
-          step="30"
-        />
+      <ToggleContent selected={selected === 'canvasSize'} column>
+        <Inner>
+          <Block>W:</Block>
+          <Range
+            name="width"
+            value={userSize.width}
+            onChange={onChange}
+            min="100"
+            max="1920"
+            step="30"
+          />
+        </Inner>
+        <Inner>
+          <Block>H:</Block>
+          <Range
+            name="height"
+            value={userSize.height}
+            onChange={onChange}
+            min="100"
+            max="1080"
+            step="30"
+          />
+        </Inner>
       </ToggleContent>
     </ToggleWrapper>
   );

@@ -55,7 +55,7 @@ const SetType = ({ ...props }) => {
   return (
     <ToggleWrapper>
       <ToggleTitle selected={selected} type="patternType" handleSelected={handleSelected}>
-        <SVG width="10" height="10" path="M12 21l-12-18h24z" /> Select Pattern Type
+        Select Pattern Type
       </ToggleTitle>
       <ToggleContent selected={selected === 'patternType'}>
         <Select data={typeList} onChange={onChange} />

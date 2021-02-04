@@ -1,11 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
-import SVG from '../../common/SVG';
 import Range from '../../common/Range';
 import ToggleWrapper from '../../layout/pattern/ToggleWrapper';
 import ToggleTitle from '../../layout/pattern/ToggleTitle';
 import ToggleContent from '../../layout/pattern/ToggleContent';
+
+const Inner = styled.div`
+  display: flex;
+  &:first-of-type {
+    margin-bottom: 10px;
+  }
+`;
+
+const Block = styled.div`
+  flex-basis: 20%;
+`;
 
 const SetImgSize = ({ ...props }) => {
   const { selected, handleSelected, width, height, onChange } = props;
@@ -15,32 +26,36 @@ const SetImgSize = ({ ...props }) => {
     img.src = pictures.find(p => p.id === drawnPicture).src;
   }
 
-  console.log('SetImgSize', img.width, img.height, width, height);
+  //console.log('SetImgSize', img.width, img.height, width, height);
 
   return (
     <ToggleWrapper>
       <ToggleTitle selected={selected} type="imgSize" handleSelected={handleSelected}>
-        <SVG width="10" height="10" path="M12 21l-12-18h24z" /> Set Cropped Image Size
+        Cropped Image Size
       </ToggleTitle>
-      <ToggleContent selected={selected === 'imgSize'}>
-        W:{' '}
-        <Range
-          name="imgWidth"
-          value={width ? width : img.width}
-          min="30"
-          max="300"
-          step="10"
-          onChange={onChange}
-        />
-        H:{' '}
-        <Range
-          name="imgHeight"
-          value={height ? height : img.height}
-          min="30"
-          max="300"
-          step="10"
-          onChange={onChange}
-        />
+      <ToggleContent selected={selected === 'imgSize'} column>
+        <Inner>
+          <Block>W:</Block>
+          <Range
+            name="imgWidth"
+            value={width ? width : img.width}
+            min="30"
+            max="300"
+            step="10"
+            onChange={onChange}
+          />
+        </Inner>
+        <Inner>
+          <Block>H:</Block>
+          <Range
+            name="imgHeight"
+            value={height ? height : img.height}
+            min="30"
+            max="300"
+            step="10"
+            onChange={onChange}
+          />
+        </Inner>
       </ToggleContent>
     </ToggleWrapper>
   );

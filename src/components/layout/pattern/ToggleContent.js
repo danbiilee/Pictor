@@ -1,13 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Wrapper = styled.div`
   display: ${props => (props.selected ? 'flex' : 'none')};
-  flex-direction: column;
+  ${props =>
+    props.column &&
+    css`
+      flex-direction: column;
+    `}
+  align-items: center;
+  padding: 5px;
 `;
 
-const ToggleContent = ({ selected, children }) => {
-  return <Wrapper selected={selected}>{children}</Wrapper>;
+const ToggleContent = ({ children, ...props }) => {
+  return <Wrapper {...props}>{children}</Wrapper>;
 };
 
 export default ToggleContent;

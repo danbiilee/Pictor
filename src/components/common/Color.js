@@ -7,7 +7,6 @@ const Block = styled.input.attrs(props => ({
 }))`
   width: 40px;
   height: 30px;
-  cursor: pointer;
 `;
 
 const Input = ({ onChange, ...props }) => {
