@@ -55,18 +55,6 @@ const Canvas = ({ setMyCanvas }) => {
   // 캔버스 사이즈 재조정
   useEffect(() => {
     const { width, height } = canvasSize;
-
-    // 패턴모드일 경우 properties 변경, 아래에서 canvas 재생성됨
-    if (canvasMode === 'pattern') {
-      dispatch(
-        changeProperties({
-          ...properties,
-          canvasWidth: width,
-          canvasHeight: height,
-        }),
-      );
-    }
-
     if (my.current) {
       my.current.resizeCanvas(width, height, canvasMode, properties);
     }

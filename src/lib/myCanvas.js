@@ -35,9 +35,6 @@ MyCanvas.prototype.resizeCanvas = function (...args) {
       this.ctx.drawImage(c, 0, 0);
       break;
     case 'pattern':
-      // 변경된 사이즈 적용 -> 사용자정의값 무시됨
-      properties.canvasWidth = width;
-      properties.canvasHeight = height;
       this.makePattern(properties);
       break;
   }
