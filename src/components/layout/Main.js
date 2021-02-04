@@ -10,11 +10,13 @@ const Header = styled.header`
   position: fixed;
   top: 0;
   width: 100vw;
-  height: 26px;
+  height: 31px;
   h1 {
-    padding: 5px;
+    padding: 5px 5px 5px 10px;
     background-color: var(--darkest-gray);
     color: #fff;
+    font-family: 'Lobster', cursive;
+    font-size: 1.2rem;
   }
 `;
 

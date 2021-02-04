@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   min-width: 0;
   padding: 5px;
-  padding-top: 31px;
+  padding-top: 36px;
   &:last-of-type {
     padding-left: 0;
   }
