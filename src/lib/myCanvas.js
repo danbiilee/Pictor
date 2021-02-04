@@ -45,9 +45,9 @@ MyCanvas.prototype.clear = function () {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 };
 
-// 크롭할 이미지 로드하기
-MyCanvas.prototype.initCropImage = function () {
-  //console.log('initCropImage', this.drawnImgSrc.substr(20, 30));
+// 이미지 로드하기
+MyCanvas.prototype.initImage = function () {
+  //console.log('initImage', this.drawnImgSrc.substr(20, 30));
   this.clear();
   this.drawnImg = new Image();
   this.drawnImg.src = this.drawnImgSrc;
@@ -169,7 +169,7 @@ MyCanvas.prototype.crop = function () {
   );
 
   // 새로운 이미지 생성. 기존 크롭이미지 대체
-  this.drawnImgSrc = c.toDataURL();
+  this.drawnImgSrc = c.toDataURL('image/png', 1);
   this.isCropped = !this.isCropped;
 
   // 이전 포인트 지우기
@@ -178,7 +178,7 @@ MyCanvas.prototype.crop = function () {
 
 MyCanvas.prototype.makePattern = function (props) {
   const myPattern = new MyPattern(this.wrapper, this.canvas, this.ctx, this.drawnImgSrc);
-  myPattern.initCropImage();
+  myPattern.initImage();
 
   // 설정값 초기화
   myPattern.setColor = props.color;
@@ -189,11 +189,12 @@ MyCanvas.prototype.makePattern = function (props) {
   myPattern.setGap = props.gap;
   myPattern.setType = props.type;
 
-  myPattern.makePattern();
+  // 이미지 저장 시 myCanvas.drawnImgSrc 참조하므로 getter로 src저장
+  this.drawnImgSrc = myPattern.getPatternSrc;
 
   // const my = this;
   // const img = new Image();
-  // img.src = c.toDataURL();
+  // img.src = c.toDataURL('image/jpeg');
   // img.onload = function () {
   //   // 새 이미지 페이지에 삽입하기
   //   my.wrapper.appendChild(this);

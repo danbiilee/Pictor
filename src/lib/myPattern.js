@@ -37,16 +37,31 @@ export class MyPattern extends MyCanvas {
     this.type = value;
   }
 
-  drawBackgroundColor() {
-    this.ctx.beginPath();
-    this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.ctx.closePath();
+  // src 리턴
+  get getPatternSrc() {
+    this.makePattern();
+
+    // 캔버스 생성
+    const c = document.createElement('canvas');
+    const cx = c.getContext('2d');
+    // 패턴 사이즈에 맞추기
+    c.width = this.canvasWidth;
+    c.height = this.canvasHeight;
+    cx.drawImage(
+      this.canvas,
+      0,
+      0,
+      this.canvasWidth,
+      this.canvasHeight,
+      0,
+      0,
+      this.canvasWidth,
+      this.canvasHeight,
+    );
+    return c.toDataURL('image/jpeg', 1);
   }
 
   makePattern() {
-    this.clear(); // 캔버스 초기화
-
     this.drawBackgroundColor(); // 배경색 그리기
 
     // 설정한 캔버스 사이즈만큼 context 크기 잘라두고 그 안에서 패턴 뿌림
@@ -79,7 +94,13 @@ export class MyPattern extends MyCanvas {
 
     // 그 뒤 다시 이전 context로 restore
     this.ctx.restore();
-    this.drawnImgSrc = this.canvas.toDataURL();
+  }
+
+  drawBackgroundColor() {
+    this.ctx.beginPath();
+    this.ctx.fillStyle = this.color;
+    this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.ctx.closePath();
   }
 
   getXVanilla(i) {

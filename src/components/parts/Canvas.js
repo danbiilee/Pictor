@@ -29,7 +29,6 @@ const Canvas = ({ setMyCanvas }) => {
 
   // 캔버스 사이즈 변경
   const handleResize = () => {
-    console.log('handleResize', wrapperRef.current.offsetWidth);
     setCanvasSize({
       width: wrapperRef.current.offsetWidth,
       height: wrapperRef.current.offsetHeight - 1,
@@ -69,12 +68,12 @@ const Canvas = ({ setMyCanvas }) => {
     // myCanvas 생성
     const cropImgSrc = drawnPicture ? pictures.find(pic => pic.id === drawnPicture).src : null;
     my.current = new MyCanvas(wrapperRef.current, canvasRef.current, ctx.current, cropImgSrc);
-    my.current.initCropImage(); // 이미지 초기화
+    my.current.initImage(); // 이미지 초기화
     setMyCanvas(my.current);
 
     switch (canvasMode) {
       case 'crop':
-        console.log('crop!!!!');
+        //console.log('crop!!!!');
         my.current.drawnImg.onload = function () {
           my.current.drawImage(1.0);
         };
@@ -84,11 +83,11 @@ const Canvas = ({ setMyCanvas }) => {
         my.current.canvas.addEventListener('mousedown', mousedownRef.current);
         break;
       case 'pattern':
-        console.log('pattern!!!!');
+        //console.log('pattern!!!!');
         my.current.makePattern(properties);
         break;
       case 'clear':
-        console.log('clear!!!!');
+        //console.log('clear!!!!');
         // clear canvas
         my.current.clear();
         break;

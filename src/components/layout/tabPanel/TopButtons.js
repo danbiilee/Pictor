@@ -3,15 +3,15 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${props => (props.flex ? props.flex : 'space-between')};
   align-items: center;
   padding: 5px;
   border-bottom: 2px solid var(--border-light-gray);
 `;
 
-const TopButtons = ({ children }) => {
+const TopButtons = ({ flex, children }) => {
   //console.log('TopButtons');
-  return <Wrapper>{children}</Wrapper>;
+  return <Wrapper flex={flex}>{children}</Wrapper>;
 };
 
 export default TopButtons;

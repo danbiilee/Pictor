@@ -18,11 +18,9 @@ const Select = ({ data, onChange }) => {
     selectRef.current.size = 5;
   };
   const handleBlur = () => {
-    console.log('blur');
     selectRef.current.size = 1;
   };
   const handleChange = () => {
-    //resetSize();
     selectRef.current.blur();
   };
   useEffect(() => {

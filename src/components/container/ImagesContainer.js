@@ -85,6 +85,8 @@ const ImagesContainer = () => {
     [selectedList, dispatch],
   );
 
+  const onReset = () => setSelectedList([]);
+
   const onDelete = () => {
     dispatch(deletePicture(selectedList));
     dispatch(clearSelectedPictures());
@@ -95,6 +97,22 @@ const ImagesContainer = () => {
       dispatch(changeCanvasMode('clear'));
     }
     setSelectedList([]);
+  };
+
+  const onDownload = () => {
+    if (!selectedList.length) {
+      alert('⚠ 이미지를 선택해주세요 ⚠');
+      return;
+    }
+    if (selectedList.length > 1) {
+      alert('⚠ 한번에 하나의 이미지만 다운로드할 수 있습니다 ⚠');
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = pictures.find(p => p.id === selectedList[0]).src;
+    link.download = 'awesome pictor.jpg';
+    link.click();
   };
 
   const onCrop = () => {
@@ -111,7 +129,10 @@ const ImagesContainer = () => {
       <TopButtons>
         <ButtonInner>
           <FileUploader />
-          <Button padding="5px" margin="0 5px 0 0" onClick={onDelete} aria-label="이미지 삭제">
+          <Button padding="5px" margin="0 5px 0 0" onClick={onDownload} aria-label="다운로드">
+            <SVG width="15" height="15" path="M16 11h5l-9 10-9-10h5v-11h8v11zm1 11h-10v2h10v-2z" />
+          </Button>
+          <Button padding="5px" margin="0 5px 0 0" onClick={onDelete} aria-label="삭제">
             <SVG
               width="15"
               height="15"
@@ -120,7 +141,14 @@ const ImagesContainer = () => {
           </Button>
         </ButtonInner>
         <ButtonInner>
-          <Button padding="5px" margin="0 5px 0 0" onClick={onCrop} aria-label="이미지 자르기">
+          <Button padding="5px" margin="0 5px 0 0" onClick={onReset} aria-label="선택 초기화">
+            <SVG
+              width="15"
+              height="15"
+              path="M18.885 3.515c-4.617-4.618-12.056-4.676-16.756-.195l-2.129-2.258v7.938h7.484l-2.066-2.191c2.82-2.706 7.297-2.676 10.073.1 4.341 4.341 1.737 12.291-5.491 12.291v4.8c3.708 0 6.614-1.244 8.885-3.515 4.686-4.686 4.686-12.284 0-16.97z"
+            />
+          </Button>
+          <Button padding="5px" margin="0 5px 0 0" onClick={onCrop} aria-label="자르기">
             <SVG
               width="15"
               height="15"

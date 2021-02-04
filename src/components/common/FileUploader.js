@@ -43,7 +43,7 @@ const FileUploader = () => {
   };
 
   return (
-    <Label htmlFor="file" aria-label="이미지 업로드">
+    <Label htmlFor="file" aria-label="업로드">
       <FileInput type="file" id="file" name="file" onChange={handelFile} ref={fileRef} />
       <SVG
         width="15"
