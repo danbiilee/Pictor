@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Pictor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> ## ❗❗❗ 개발중
 
-## Available Scripts
+![badge react](https://img.shields.io/badge/code-react-238db3?logo=react&logoColor=FFFFFF)
+![badge portfolio](https://img.shields.io/badge/for-✨patternMaker-ff6b6b)
+![badge portfolio](https://img.shields.io/badge/for-🧁pictureEditor-ff6b6b)
 
-In the project directory, you can run:
 
-### `yarn start`
+## 픽토르 사용법 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 패턴 메이커  
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**✅ 이미지 업로드하기**
 
-### `yarn test`
+- **IMAGES 탭**에서 업로드한 이미지는 원하는 부분만 잘라내 패턴을 만드는 데 사용할 수 있습니다. 
+  - 해당 이미지는 `원본` 카테고리에 포함됩니다. 
+  - 원본 파일의 사이즈가 유지됩니다. 
+![upload image](./docs/img/upload-image1.gif)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- 곧바로 패턴 메이킹 시 사용할 이미지를 업로드 하려면, **PATTERN 탭**에서 업로드 합니다.
+  - 해당 이미지는 `크롭` 카테고리에 포함되며, 업로드 즉시 패턴을 만드는 데 사용할 수 있습니다.
+  - 이미지 사이즈는 `최대 300px * 300px` 값으로 자동 리사이즈됩니다. 
+![upload image](./docs/img/upload-image2.gif)
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**✅ 이미지 선택 및 초기화** 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+IMAGES 탭의 이미지 목록에서는 멀티 선택이 가능합니다. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+하지만 현재는 이미지 삭제를 제외한 나머지 기능(크롭, 패턴 만들기, 다운로드)들은 한 번에 하나의 이미지로만 작업이 가능하기 때문에, 편의를 위해 선택한 이미지들을 전부 초기화하는 버튼을 추가했습니다.  
 
-### `yarn eject`
+![select image](./docs/img/select-image.gif)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**✅ 이미지 크롭하기**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+패턴을 만들기 위해선 원하는 부분만 잘라낸 `크롭` 이미지를 생성해야 합니다. _(크롭이 번거롭거나 필요없다면, PATTERN 탭에서 이미지를 업로드하면 됩니다.)_
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![crop image](./docs/img/crop-image.gif)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**✅ 패턴 만들기** 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+아래의 옵션들을 설정해 패턴을 만들 수 있습니다. 
+- 배경 컬러
+- 배경 사이즈
+- 이미지 
+- 이미지 사이즈
+- 이미지 간격 
+- 패턴 종류 
 
-### Code Splitting
+![make pattern](./docs/img/make-pattern.gif)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+또한 설정 초기화 버튼을 통해 선택한 이미지만 유지한 채, 상세 설정값들을 초기화할 수도 있습니다. 
 
-### Analyzing the Bundle Size
+![reset options](./docs/img/reset-options.gif)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+**✅ 이미지 다운로드** 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+픽토르에서 생성한 크롭 이미지나 패턴 이미지를 다운로드할 수 있습니다. 
 
-### Advanced Configuration
+![download image](./docs/img/down-image.gif)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
