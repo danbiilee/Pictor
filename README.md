@@ -1,6 +1,4 @@
-# Pictor
-
-> ## ❗❗❗ 개발중
+# Pictor (💬개발중💬)
 
 ![badge react](https://img.shields.io/badge/code-react-238db3?logo=react&logoColor=FFFFFF)
 ![badge portfolio](https://img.shields.io/badge/for-✨patternMaker-ff6b6b)
