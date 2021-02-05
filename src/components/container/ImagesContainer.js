@@ -116,7 +116,9 @@ const ImagesContainer = () => {
 
     const link = document.createElement('a');
     link.href = pictures.find(p => p.id === selectedList[0]).src;
-    link.download = 'awesome pictor.jpg';
+    let extn = link.href.split(';base64')[0].substr(11); // 확장자
+    extn = extn === 'jpeg' ? 'jpg' : extn;
+    link.download = `awesome pictor.${extn}`;
     link.click();
   };
 
