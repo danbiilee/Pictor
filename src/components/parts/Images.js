@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const Ul = styled.ul`
   overflow-y: auto;
   flex: 1 0 500px;
+  flex-basis: auto;
   width: 100%;
   padding: 10px;
 `;
