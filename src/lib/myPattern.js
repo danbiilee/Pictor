@@ -58,11 +58,14 @@ export class MyPattern extends MyCanvas {
       this.canvasWidth,
       this.canvasHeight,
     );
-    return c.toDataURL('image/jpeg', 1);
+
+    return c.toDataURL('image/png', 1);
   }
 
   makePattern() {
     this.drawBackgroundColor(); // 배경색 그리기
+
+    //console.log('myPattern', this.canvasWidth, this.canvasHeight);
 
     // 설정한 캔버스 사이즈만큼 context 크기 잘라두고 그 안에서 패턴 뿌림
     this.ctx.save();
@@ -268,7 +271,11 @@ export class MyPattern extends MyCanvas {
       if (flipType === 'fold') {
         y += this.imgHeight + this.gap;
       } else {
-        y = flipFlag ? y + this.gap : y + this.imgHeight + this.gap * 2;
+        if (this.type.includes('line')) {
+          y = flipFlag ? y + this.gap : y + this.imgHeight * 2 + this.gap;
+        } else {
+          y = flipFlag ? y + this.gap : y + this.imgHeight + this.gap * 2;
+        }
       }
     }
   }
